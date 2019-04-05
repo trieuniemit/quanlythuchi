@@ -1,0 +1,8 @@
+{
+    "AppName": "Quản lý tài chính",
+    "DataBaseConfig": {
+        "jdbc": "jdbc:mysql://localhost:3306/quanlytaichinh",
+        "dbuser": "root",
+        "dbpassword":""
+    }
+}
