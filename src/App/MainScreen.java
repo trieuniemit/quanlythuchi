@@ -25,8 +25,8 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     private void getUserFromDataBase() {
-        ArrayList<HashMap> users = dbManager.getQuery("select * from users");
-        //dbManager.setQuery("update users set password = 123456 where id = 2");
+        //ArrayList<HashMap> users = dbManager.getQuery("select * from users");
+        dbManager.setQuery("update users set password = 123456 where id = 1");
         //String[] usernames = new String[users.size()];
         
 //        int row = 0;

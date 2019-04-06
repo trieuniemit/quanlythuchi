@@ -56,7 +56,7 @@ public class DBManager {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
         }
         
         return returnData;
@@ -64,10 +64,10 @@ public class DBManager {
     
     public boolean setQuery(String sqlString) {
         try {
-           stmt.executeQuery(sqlString);
+           stmt.execute(sqlString);
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
         }
         
         return false;
@@ -88,7 +88,7 @@ public class DBManager {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
         }
         
         return rows;
