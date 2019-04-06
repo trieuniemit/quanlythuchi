@@ -64,7 +64,7 @@ public class DBManager {
     
     public boolean setQuery(String sqlString) {
         try {
-            stmt.executeQuery(sqlString);
+           stmt.executeQuery(sqlString);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
