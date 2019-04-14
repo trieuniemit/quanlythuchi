@@ -2,7 +2,7 @@ package entity;
 
 /**
  *
- * @author TrieuTaiNiem
+ * @author Trieu Tai Niem
  */
 public class InCome {
     private int id;

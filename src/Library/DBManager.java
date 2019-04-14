@@ -8,12 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author TrieuTaiNiem
+ * @author Trieu Tai Niem
  */
 
 public class DBManager {
@@ -62,6 +60,7 @@ public class DBManager {
         return returnData;
     }
     
+    //method for update or delete data, return true on success, false on failure
     public boolean setQuery(String sqlString) {
         try {
            stmt.execute(sqlString);
@@ -73,6 +72,7 @@ public class DBManager {
         return false;
     }
     
+    //method for get single row in db record
     public HashMap<String, Object> getSingleRow(String sqlString) {
         HashMap<String, Object> rows = new HashMap<>();
         
@@ -94,5 +94,12 @@ public class DBManager {
         return rows;
     }
     
-    
+    public String securceSql(String sqlQuery, String[] params) {
+        for(int i = 1; i <= params.length; i ++) {
+            String replaceChars = params[i-1].replaceAll("[,'`\"\";:<>=]", "");
+            sqlQuery = sqlQuery.replace("{$"+i+"}", "'" + replaceChars + "'");
+        }
+        
+        return sqlQuery;
+    }
 }

@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author TrieuTaiNiem
+ * @author Trieu Tai Niem
  * @created_at 2019-04-05
  */
 

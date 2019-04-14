@@ -2,7 +2,7 @@ package entity;
 
 /**
  *
- * @author TrieuTaiNiem
+ * @author Trieu Tai Niem
  */
 public class Spend {
     private int id;
