@@ -102,4 +102,10 @@ public class DBManager {
         
         return sqlQuery;
     }
+    
+    public String securceSql(String sqlQuery, String value) {
+        String replaceChars = value.replaceAll("[,'`\"\";:<>=]", "");
+        sqlQuery = sqlQuery.replace("{$}", "'" + replaceChars + "'");
+        return sqlQuery;
+    }
 }
