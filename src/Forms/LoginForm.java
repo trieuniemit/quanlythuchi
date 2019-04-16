@@ -3,6 +3,8 @@ package Forms;
 import Entity.User;
 import Model.LoginModel;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
@@ -13,6 +15,7 @@ public class LoginForm extends javax.swing.JFrame {
     
     public LoginForm() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,6 +46,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnLogin.setText("Đăng nhập");
+        btnLogin.setFocusable(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -51,6 +55,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         btnClear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnClear.setText("Nhập lại");
+        btnClear.setFocusable(false);
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
@@ -152,8 +157,8 @@ public class LoginForm extends javax.swing.JFrame {
             this.setVisible(false);
         } else {
             System.out.println("sai ten dang nhap hoac mat khau");
+            showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu.", "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
-        
         
     }//GEN-LAST:event_btnLoginActionPerformed
 

@@ -25,6 +25,7 @@ public class MainForm extends javax.swing.JFrame {
     
     public MainForm() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     /**
@@ -32,6 +33,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm(User user) {
         initComponents();
+        setLocationRelativeTo(null);
         _currentUser = user;
         contentSize = TabContent.getSize();
         initTabContent(new InComes());

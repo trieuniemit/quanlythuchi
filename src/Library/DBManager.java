@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
@@ -30,9 +32,9 @@ public class DBManager {
                 config.getValue("DataBaseConfig.dbpassword")
             );
             stmt = con.createStatement();
-            
         } catch (SQLException | ClassNotFoundException ex) {
             System.err.println("ERROR: Can't connect to database! :))");
+            showMessageDialog(null, "Không thể kết nối đến cơ sở dữ liệu!", "Thông báo!", JOptionPane.ERROR_MESSAGE);
         }
     }
     
