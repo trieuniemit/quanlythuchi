@@ -1,10 +1,12 @@
 package Forms.Panels;
 
+import Library.Helper;
 import Model.InComesModel;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Calendar;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,6 +15,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InComes extends javax.swing.JPanel {
     InComesModel inComesModel = new InComesModel();
+    HashMap minMaxDate;
+    
+    int currentMonth = 0;
+    int currentYear = 0;
     
     /**
      * Creates new form InComes
@@ -39,15 +45,28 @@ public class InComes extends javax.swing.JPanel {
         incomesTable.getColumnModel().getColumn(2).setPreferredWidth(100);
         incomesTable.getColumnModel().getColumn(3).setPreferredWidth(180);
         
-        new Thread(this::showAllInComes).start();
+       
+        //get min max date and init current year, month
+        new Thread(() -> {
+            minMaxDate = inComesModel.getMinMaxDate();
+            currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
+            currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            btnNextMonth.setVisible(false);
+            initControlDate();
+        }).start();
     }
     
-    private void showAllInComes() {
+    private void getAllInComes() {
         ArrayList<HashMap> allInComes = inComesModel.getAllInComes();
+        showInComesToTable(allInComes);
+    }
+    
+    private void showInComesToTable(ArrayList<HashMap> data) {
         DefaultTableModel tableModel = (DefaultTableModel) incomesTable.getModel();
+        tableModel.setRowCount(0);
         
         int rowIndex = 0;
-        for(HashMap row: allInComes) {
+        for(HashMap row: data) {
             tableModel.addRow(new String[] {
                 ""+(++rowIndex),
                 row.get("title").toString(),
@@ -56,6 +75,25 @@ public class InComes extends javax.swing.JPanel {
                 row.get("datetime").toString()
             });
         }
+    }
+    
+    private void initControlDate() {
+        lbMonthYear.setText(Helper.monthsInYear[currentMonth-1] + ", "+ currentYear);
+        
+        if(currentMonth == Integer.parseInt(minMaxDate.get("min_month").toString()) && currentYear == Integer.parseInt(minMaxDate.get("min_year").toString())) {
+            btnPrevMonth.setVisible(false);
+        } else {
+            btnPrevMonth.setVisible(true);
+        }
+        
+        if(currentMonth == Integer.parseInt(minMaxDate.get("max_month").toString()) && currentYear == Integer.parseInt(minMaxDate.get("max_year").toString())) {
+            btnNextMonth.setVisible(false);
+        } else {
+            btnNextMonth.setVisible(true);
+        }
+        
+        ArrayList<HashMap> inComeByMonthYear = inComesModel.getInComesByMonth(currentMonth, currentYear);
+        showInComesToTable(inComeByMonthYear);
     }
     
     /**
@@ -72,12 +110,13 @@ public class InComes extends javax.swing.JPanel {
         incomesTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         btnAddNew = new javax.swing.JButton();
-        btnViewByMonth = new javax.swing.JButton();
+        btnViewAll = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        panelControlDate = new javax.swing.JPanel();
+        btnPrevMonth = new javax.swing.JLabel();
+        lbMonthYear = new javax.swing.JLabel();
+        btnNextMonth = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -119,15 +158,15 @@ public class InComes extends javax.swing.JPanel {
         btnAddNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddNew.setFocusable(false);
 
-        btnViewByMonth.setBackground(new java.awt.Color(0, 102, 102));
-        btnViewByMonth.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnViewByMonth.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewByMonth.setText("Xem theo tháng");
-        btnViewByMonth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewByMonth.setFocusable(false);
-        btnViewByMonth.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnViewAll.setBackground(new java.awt.Color(0, 102, 102));
+        btnViewAll.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnViewAll.setForeground(new java.awt.Color(255, 255, 255));
+        btnViewAll.setText("Xem tất cả");
+        btnViewAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewAll.setFocusable(false);
+        btnViewAll.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnViewByMonthMousePressed(evt);
+                btnViewAllMousePressed(evt);
             }
         });
 
@@ -149,8 +188,8 @@ public class InComes extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(btnAddNew)
                 .addGap(18, 18, 18)
-                .addComponent(btnViewByMonth)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 262, Short.MAX_VALUE)
+                .addComponent(btnViewAll)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
                 .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
                 .addComponent(btnSearch)
@@ -168,19 +207,49 @@ public class InComes extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                             .addComponent(btnAddNew, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                            .addComponent(btnViewByMonth, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                            .addComponent(btnViewAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(90, 90, 90))
+                .addContainerGap())
         );
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Tháng 4, 2019");
+        btnPrevMonth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/prev-page.png"))); // NOI18N
+        btnPrevMonth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrevMonth.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnPrevMonthMousePressed(evt);
+            }
+        });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/prev-page.png"))); // NOI18N
-        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbMonthYear.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        lbMonthYear.setForeground(new java.awt.Color(0, 153, 153));
+        lbMonthYear.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbMonthYear.setText("Tháng 4, 2019");
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/next-page.png"))); // NOI18N
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextMonth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/next-page.png"))); // NOI18N
+        btnNextMonth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextMonth.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnNextMonthMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelControlDateLayout = new javax.swing.GroupLayout(panelControlDate);
+        panelControlDate.setLayout(panelControlDateLayout);
+        panelControlDateLayout.setHorizontalGroup(
+            panelControlDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelControlDateLayout.createSequentialGroup()
+                .addComponent(btnPrevMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(312, 312, 312)
+                .addComponent(lbMonthYear, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNextMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelControlDateLayout.setVerticalGroup(
+            panelControlDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnNextMonth)
+            .addComponent(btnPrevMonth)
+            .addComponent(lbMonthYear, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -190,13 +259,8 @@ public class InComes extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelControlDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(314, 314, 314)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -204,35 +268,61 @@ public class InComes extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(panelControlDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewByMonthMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewByMonthMousePressed
+    private void btnViewAllMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllMousePressed
+       if(panelControlDate.isVisible()) {
+            getAllInComes();
+            panelControlDate.setVisible(false);
+            btnViewAll.setText("Xem theo tháng");
+       } else {
+           initControlDate();
+           panelControlDate.setVisible(true);
+           btnViewAll.setText("Xem tất cả");
+       }
+    }//GEN-LAST:event_btnViewAllMousePressed
 
-    }//GEN-LAST:event_btnViewByMonthMousePressed
+    private void btnPrevMonthMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrevMonthMousePressed
+        if(currentMonth == 1) {
+            currentMonth = 12;
+            currentYear--;
+        } else {
+            currentMonth--;
+        }
+        initControlDate();
+    }//GEN-LAST:event_btnPrevMonthMousePressed
+
+    private void btnNextMonthMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNextMonthMousePressed
+        if(currentMonth == 12) {
+            currentMonth = 1;
+            currentYear++;
+        } else {
+            currentMonth++;
+        }
+        initControlDate();
+    }//GEN-LAST:event_btnNextMonthMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNew;
+    private javax.swing.JLabel btnNextMonth;
+    private javax.swing.JLabel btnPrevMonth;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnViewByMonth;
+    private javax.swing.JButton btnViewAll;
     private javax.swing.JTable incomesTable;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbMonthYear;
+    private javax.swing.JPanel panelControlDate;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
 }
