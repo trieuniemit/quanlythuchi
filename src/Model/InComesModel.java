@@ -20,7 +20,7 @@ public class InComesModel {
     }
     
     public ArrayList<HashMap> searchInComes(String keyword) {
-        String sqlString = dBManager.securceSql("SELECT * FROM incomes WHERE title LIKE %{$}%", keyword);
+        String sqlString = dBManager.securceSql("SELECT * FROM incomes WHERE title LIKE {$}", "%" + keyword + "%");
         return dBManager.getQuery(sqlString);
     }
     
