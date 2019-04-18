@@ -23,18 +23,12 @@ public class MainForm extends javax.swing.JFrame {
     GridBagLayout gridBagLayout = new GridBagLayout();
     Dimension contentSize;
     
-    public MainForm() {
-        initComponents();
-        setLocationRelativeTo(null);
-    }
-    
     /**
      * @param user
      */
-    public MainForm(User user) {
+    public MainForm() {
         initComponents();
         setLocationRelativeTo(null);
-        _currentUser = user;
         contentSize = TabContent.getSize();
         initTabContent(new InComes());
         TabBarItem1.setBackground(new Color(0, 153, 153));

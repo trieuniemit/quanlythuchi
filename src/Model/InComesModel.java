@@ -1,6 +1,8 @@
 package Model;
 
 import Library.DBManager;
+import Library.Helper;
+import entity.InCome;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,17 +13,35 @@ import java.util.HashMap;
 public class InComesModel {
     DBManager dBManager = new DBManager();
     
-    public ArrayList<HashMap> getAllInComes() {
-        return dBManager.getQuery("SELECT * FROM incomes");
+    private ArrayList<InCome> convertToInComeArray(ArrayList<HashMap> dbData) {
+        ArrayList<InCome> inComes = new ArrayList<>();
+        dbData.forEach((row) -> {
+            inComes.add(new InCome(
+                (int)row.get("id"),
+                Helper.currentUser.getId(),
+                row.get("title").toString(),
+                row.get("note").toString(),
+                (int)row.get("amount"),
+                row.get("datetime").toString()
+            ));
+        });
+        return inComes;
     }
     
-    public ArrayList<HashMap> getInComesByMonth(int month, int year) {
-        return dBManager.getQuery("SELECT * FROM incomes WHERE YEAR(datetime) = " + year + " AND MONTH(datetime) = " + month);
+    public ArrayList<InCome> getAllInComes() {
+        ArrayList<HashMap> dbData = dBManager.getQuery("SELECT * FROM incomes");
+        return convertToInComeArray(dbData);
     }
     
-    public ArrayList<HashMap> searchInComes(String keyword) {
+    public ArrayList<InCome> getInComesByMonth(int month, int year) {
+        ArrayList<HashMap> dbData = dBManager.getQuery("SELECT * FROM incomes WHERE YEAR(datetime) = " + year + " AND MONTH(datetime) = " + month);
+        return convertToInComeArray(dbData);
+    }
+    
+    public ArrayList<InCome> searchInComes(String keyword) {
         String sqlString = dBManager.securceSql("SELECT * FROM incomes WHERE title LIKE {$}", "%" + keyword + "%");
-        return dBManager.getQuery(sqlString);
+        ArrayList<HashMap> dbData = dBManager.getQuery(sqlString);
+        return convertToInComeArray(dbData);
     }
     
     public HashMap getMinMaxDate() {
@@ -36,5 +56,13 @@ public class InComesModel {
         returnData.put("min_year", minDate.substring(0,4));
         returnData.put("min_month", minDate.substring(5,7));
         return returnData;
+    }
+    
+    public boolean insertNewInCome(InCome inCome) {
+        String sqlString = dBManager.securceSql(
+            "INSERT INTO incomes(`user_id`, `title`, `note`, `amount`) VALUES({$1},{$2}, {$3}, {$4})", 
+            new String[] {inCome.getUserId() + "", inCome.getTitle(), inCome.getNote(), inCome.getAmount()+""}
+        );
+        return dBManager.setQuery(sqlString);
     }
 }
