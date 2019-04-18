@@ -86,7 +86,6 @@ public class MainForm extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setLocation(new java.awt.Point(500, 300));
 
-        Container.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Container.setAlignmentX(0.0F);
         Container.setAlignmentY(0.0F);
 
@@ -334,7 +333,7 @@ public class MainForm extends javax.swing.JFrame {
         TabContent.setLayout(TabContentLayout);
         TabContentLayout.setHorizontalGroup(
             TabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 779, Short.MAX_VALUE)
+            .addGap(0, 781, Short.MAX_VALUE)
         );
         TabContentLayout.setVerticalGroup(
             TabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

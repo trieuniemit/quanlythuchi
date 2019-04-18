@@ -1,6 +1,8 @@
 package Forms.Panels;
 
 import Library.Helper;
+import Library.WordWrapCellRenderer;
+import Library.State;
 import Model.InComesModel;
 import entity.InCome;
 import java.awt.Dimension;
@@ -51,6 +53,8 @@ public class InComes extends javax.swing.JPanel {
         incomesTable.getColumnModel().getColumn(2).setPreferredWidth(100);
         incomesTable.getColumnModel().getColumn(3).setPreferredWidth(180);
         incomesTable.getColumnModel().getColumn(4).setPreferredWidth(150);
+        
+        incomesTable.getColumnModel().getColumn(3).setCellRenderer(new WordWrapCellRenderer());;
         
         //set align for column of table
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -466,7 +470,7 @@ public class InComes extends javax.swing.JPanel {
         }
         
         InCome inCome = new InCome(
-            Helper.currentUser.getId(),
+            State.currentUser.getId(),
             titleFiled.getText(),
             noteField.getText(),
             Integer.valueOf(amountField.getText())
@@ -475,6 +479,8 @@ public class InComes extends javax.swing.JPanel {
         boolean resuilt = inComesModel.insertNewInCome(inCome);
         if(resuilt) {
             showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            initControlDate();
+            addNewDialog.dispose();
         } else {
             showMessageDialog(addNewDialog, "Có lỗi trong quá trình thêm vào bảng thu nhập.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
         }

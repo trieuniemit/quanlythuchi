@@ -1,7 +1,7 @@
 package Forms;
 
 import Entity.User;
-import Library.Helper;
+import Library.State;
 import Model.LoginModel;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -152,7 +152,7 @@ public class LoginForm extends javax.swing.JFrame {
                 loginResuilt.get("created_at").toString()
             );
             
-            Helper.currentUser = logedInUser;
+            State.currentUser = logedInUser;
             
             //instance new from and set it's visible
             new MainForm().setVisible(true);

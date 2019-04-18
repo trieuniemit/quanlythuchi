@@ -1,7 +1,7 @@
 package Model;
 
 import Library.DBManager;
-import Library.Helper;
+import Library.State;
 import entity.InCome;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class InComesModel {
         dbData.forEach((row) -> {
             inComes.add(new InCome(
                 (int)row.get("id"),
-                Helper.currentUser.getId(),
+                State.currentUser.getId(),
                 row.get("title").toString(),
                 row.get("note").toString(),
                 (int)row.get("amount"),
