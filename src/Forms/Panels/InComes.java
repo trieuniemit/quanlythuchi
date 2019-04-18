@@ -2,13 +2,17 @@ package Forms.Panels;
 
 import Library.Helper;
 import Model.InComesModel;
+import entity.InCome;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Calendar;
-import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -42,11 +46,19 @@ public class InComes extends javax.swing.JPanel {
             }
         });
         
-        incomesTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+        incomesTable.getColumnModel().getColumn(0).setMaxWidth(50);
         incomesTable.getColumnModel().getColumn(1).setPreferredWidth(150);
         incomesTable.getColumnModel().getColumn(2).setPreferredWidth(100);
         incomesTable.getColumnModel().getColumn(3).setPreferredWidth(180);
+        incomesTable.getColumnModel().getColumn(4).setPreferredWidth(150);
         
+        //set align for column of table
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        incomesTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        incomesTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
        
         //get min max date and init current year, month
         new Thread(() -> {
@@ -59,23 +71,17 @@ public class InComes extends javax.swing.JPanel {
     }
     
     private void getAllInComes() {
-        ArrayList<HashMap> allInComes = inComesModel.getAllInComes();
+        ArrayList<InCome> allInComes = inComesModel.getAllInComes();
         showInComesToTable(allInComes);
     }
     
-    private void showInComesToTable(ArrayList<HashMap> data) {
+    private void showInComesToTable(ArrayList<InCome> data) {
         DefaultTableModel tableModel = (DefaultTableModel) incomesTable.getModel();
         tableModel.setRowCount(0);
-        
+         
         int rowIndex = 0;
-        for(HashMap row: data) {
-            tableModel.addRow(new String[] {
-                ""+(++rowIndex),
-                row.get("title").toString(),
-                row.get("amount").toString(),
-                row.get("note").toString(),
-                row.get("datetime").toString()
-            });
+        for(InCome row: data) {
+            tableModel.addRow(new Object[] {++rowIndex, row.getTitle(), Helper.currencyFormat(row.getAmount()), row.getNote(), row.getDatetime()});
         }
     }
     
@@ -94,7 +100,7 @@ public class InComes extends javax.swing.JPanel {
             btnNextMonth.setVisible(true);
         }
         
-        ArrayList<HashMap> inComeByMonthYear = inComesModel.getInComesByMonth(currentMonth, currentYear);
+        ArrayList<InCome> inComeByMonthYear = inComesModel.getInComesByMonth(currentMonth, currentYear);
         showInComesToTable(inComeByMonthYear);
     }
     
@@ -158,16 +164,27 @@ public class InComes extends javax.swing.JPanel {
         noteField.setRows(5);
         jScrollPane2.setViewportView(noteField);
 
+        btnReset.setBackground(new java.awt.Color(0, 102, 102));
         btnReset.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
         btnReset.setText("Nhập lại");
+        btnReset.setFocusable(false);
         btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnResetMousePressed(evt);
             }
         });
 
+        btnSave.setBackground(new java.awt.Color(0, 102, 102));
         btnSave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setText("Lưu lại");
+        btnSave.setFocusable(false);
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnSaveMousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout addNewDialogLayout = new javax.swing.GroupLayout(addNewDialog.getContentPane());
         addNewDialog.getContentPane().setLayout(addNewDialogLayout);
@@ -233,16 +250,9 @@ public class InComes extends javax.swing.JPanel {
                 "STT", "Tiêu đề", "Số tiền", "Ghi chú", "Thời gian"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, true
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -430,7 +440,7 @@ public class InComes extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNextMonthMousePressed
 
     private void btnSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMousePressed
-        ArrayList<HashMap> inComeByMonthYear = inComesModel.searchInComes(searchField.getText());
+        ArrayList<InCome> inComeByMonthYear = inComesModel.searchInComes(searchField.getText());
         showInComesToTable(inComeByMonthYear);
         btnNextMonth.setVisible(false);
         btnPrevMonth.setVisible(false);
@@ -448,6 +458,27 @@ public class InComes extends javax.swing.JPanel {
         noteField.setText("");
         amountField.setText("");
     }//GEN-LAST:event_btnResetMousePressed
+
+    private void btnSaveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMousePressed
+        if(titleFiled.getText().trim().isEmpty() || amountField.getText().trim().isEmpty()) {
+            showMessageDialog(addNewDialog, "Trường tiêu đề và số tiền không được bỏ trống.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        InCome inCome = new InCome(
+            Helper.currentUser.getId(),
+            titleFiled.getText(),
+            noteField.getText(),
+            Integer.valueOf(amountField.getText())
+        );
+        
+        boolean resuilt = inComesModel.insertNewInCome(inCome);
+        if(resuilt) {
+            showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            showMessageDialog(addNewDialog, "Có lỗi trong quá trình thêm vào bảng thu nhập.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSaveMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

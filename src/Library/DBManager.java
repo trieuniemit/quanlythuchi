@@ -65,7 +65,7 @@ public class DBManager {
     //method for update or delete data, return true on success, false on failure
     public boolean setQuery(String sqlString) {
         try {
-           stmt.execute(sqlString);
+            stmt.execute(sqlString);
             return true;
         } catch (SQLException ex) {
             System.err.println(ex);

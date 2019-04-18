@@ -1,6 +1,7 @@
 package Forms;
 
 import Entity.User;
+import Library.Helper;
 import Model.LoginModel;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -151,12 +152,13 @@ public class LoginForm extends javax.swing.JFrame {
                 loginResuilt.get("created_at").toString()
             );
             
+            Helper.currentUser = logedInUser;
+            
             //instance new from and set it's visible
-            new MainForm(logedInUser).setVisible(true);
+            new MainForm().setVisible(true);
             //hide current form
             this.setVisible(false);
         } else {
-            System.out.println("sai ten dang nhap hoac mat khau");
             showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu.", "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
         
