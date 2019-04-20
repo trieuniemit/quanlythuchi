@@ -252,7 +252,7 @@
               </Table>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
-            <Property name="rowHeight" type="int" value="20"/>
+            <Property name="rowHeight" type="int" value="30"/>
           </Properties>
         </Component>
       </SubComponents>
