@@ -1,10 +1,14 @@
 package Forms.Panels;
 
+import Library.DBManager;
 import Library.Helper;
+import Library.State;
 import Model.SpendModel;
 import entity.Spend;
 import java.util.ArrayList;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -41,7 +45,7 @@ public class Spends extends javax.swing.JPanel {
         tableModel.setRowCount(0);
         
         for(Spend row : data){
-            Object[] rowValues = {row.getId(),row.getTitle(),row.getNote(),row.getAmount(),row.getDatetime()};
+            Object[] rowValues = {row.getId(),row.getTitle(),row.getNote(),Helper.currencyFormat(row.getAmount()),row.getDatetime()};
             tableModel.addRow(rowValues);
         }
     }
@@ -83,9 +87,19 @@ public class Spends extends javax.swing.JPanel {
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnRetype.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         btnRetype.setText("Nhập lại");
+        btnRetype.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetypeActionPerformed(evt);
+            }
+        });
 
         btnExit.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         btnExit.setText("Thoát");
@@ -213,7 +227,16 @@ public class Spends extends javax.swing.JPanel {
             new String [] {
                 "STT", "Tiêu đề", "Ghi chú", "Số tiền", "Thời gian"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableSpends.setSurrendersFocusOnKeystroke(true);
         jScrollPane1.setViewportView(tableSpends);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
@@ -291,8 +314,47 @@ public class Spends extends javax.swing.JPanel {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
+        txtTittle.setText("");
+        txtAmount.setText("");
+        txtareaNotes.setText("");
         dialogAdd.dispose();
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        
+        if(txtTittle.getText().isEmpty() || txtAmount.getText().isEmpty()){
+            showMessageDialog(dialogAdd,"Bạn chưa nhập tiêu đề hoặc số tiền !","Thông báo",JOptionPane.ERROR_MESSAGE);
+        return;
+        }
+        Spend spend = new Spend(
+                State.currentUser.getId(),
+                Integer.valueOf(txtAmount.getText()),
+                txtTittle.getText(),
+                txtareaNotes.getText()
+        );
+        if(btnAdd.getText() == "Thêm"){
+        spendsModel.insertSpend(spend);
+        showDataWithMonth();
+        dialogAdd.dispose();
+        }
+        else{
+            tableSpends.getSelectedRow();
+            spendsModel.updateSpend(spend);
+            showDataWithMonth();
+            dialogAdd.dispose();
+        }
+        txtTittle.setText("");
+        txtAmount.setText("");
+        txtareaNotes.setText("");
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnRetypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetypeActionPerformed
+        // TODO add your handling code here:
+        txtTittle.setText("");
+        txtAmount.setText("");
+        txtareaNotes.setText("");
+    }//GEN-LAST:event_btnRetypeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

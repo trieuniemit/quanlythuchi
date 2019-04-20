@@ -6,9 +6,11 @@
 package Model;
 
 import Library.DBManager;
+import Library.State;
 import entity.Spend;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.*;
 
 /**
  *
@@ -32,6 +34,23 @@ public class SpendModel {
             ));
         }
         return spends;
+    }
+    
+    public boolean insertSpend(Spend spend){
+        
+        String sqlQuery = dBManager.securceSql(
+                "INSERT INTO Spends (user_id,title,note,amount) VALUES({$1},{$2},{$3},{$4})",
+                new String[]{State.currentUser.getId()+"",spend.getTitle(),spend.getNote(),spend.getAmount()+""}
+        );
+        return dBManager.setQuery(sqlQuery);
+    }
+    
+    public  boolean updateSpend(Spend spend){
+        String sqlQuery = dBManager.securceSql(
+                "UPDATE Spends SET title={$1}, note={$2}, amount={$3} where id={$4}",
+                new String[]{spend.getTitle(),spend.getNote(),spend.getAmount()+"",spend.getId()+""}
+        );
+        return dBManager.setQuery(sqlQuery);
     }
     
     public ArrayList<Spend> getMonthYear(int month, int year){

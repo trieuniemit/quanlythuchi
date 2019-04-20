@@ -6,6 +6,7 @@ package entity;
  */
 public class Spend {
     private int id;
+    private int userId;
     private int amount;
     private String title;
     private String note;
@@ -14,6 +15,15 @@ public class Spend {
     public Spend() {
     }
     
+    public Spend(int id, int userId,int amount, String title, String note, String datetime) {
+        this.id = id;
+        this.userId = userId;
+        this.amount = amount;
+        this.title = title;
+        this.note = note;
+        this.datetime = datetime;
+    }
+
     public Spend(int id, int amount, String title, String note, String datetime) {
         this.id = id;
         this.amount = amount;
@@ -21,7 +31,16 @@ public class Spend {
         this.note = note;
         this.datetime = datetime;
     }
+    
+    
+    public Spend(int userId, int amount, String title, String note) {
+        this.userId = userId;
+        this.amount = amount;
+        this.title = title;
+        this.note = note;
+    }
 
+    
     public int getId() {
         return id;
     }
