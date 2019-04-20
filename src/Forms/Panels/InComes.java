@@ -5,12 +5,14 @@ import Library.WordWrapCellRenderer;
 import Library.State;
 import Model.InComesModel;
 import entity.InCome;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Calendar;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -48,21 +50,7 @@ public class InComes extends javax.swing.JPanel {
             }
         });
         
-        incomesTable.getColumnModel().getColumn(0).setMaxWidth(50);
-        incomesTable.getColumnModel().getColumn(1).setPreferredWidth(150);
-        incomesTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-        incomesTable.getColumnModel().getColumn(3).setPreferredWidth(180);
-        incomesTable.getColumnModel().getColumn(4).setPreferredWidth(150);
-        
-        incomesTable.getColumnModel().getColumn(3).setCellRenderer(new WordWrapCellRenderer());;
-        
-        //set align for column of table
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        incomesTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        incomesTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+        initTableStyles();
        
         //get min max date and init current year, month
         new Thread(() -> {
@@ -72,6 +60,28 @@ public class InComes extends javax.swing.JPanel {
             btnNextMonth.setVisible(false);
             initControlDate();
         }).start();
+    }
+    
+    private  void initTableStyles() {
+        incomesTable.getTableHeader().setPreferredSize(new Dimension(100, 30));
+        incomesTable.getColumnModel().getColumn(0).setMaxWidth(50);
+        incomesTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+        incomesTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        incomesTable.getColumnModel().getColumn(3).setPreferredWidth(180);
+        incomesTable.getColumnModel().getColumn(4).setPreferredWidth(150);
+        
+        //set padding and wrap word for table cell
+        for(int i = 0; i < incomesTable.getColumnCount(); i++) {
+            incomesTable.getColumnModel().getColumn(i).setCellRenderer(new WordWrapCellRenderer());;
+        }
+        
+        //set align for column of table
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        incomesTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        incomesTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
     }
     
     private void getAllInComes() {
@@ -143,7 +153,6 @@ public class InComes extends javax.swing.JPanel {
 
         addNewDialog.setTitle("Thêm thu nhập mới");
         addNewDialog.setAlwaysOnTop(true);
-        addNewDialog.setMaximumSize(new java.awt.Dimension(390, 357));
         addNewDialog.setMinimumSize(new java.awt.Dimension(390, 357));
         addNewDialog.setType(java.awt.Window.Type.POPUP);
 
@@ -263,7 +272,7 @@ public class InComes extends javax.swing.JPanel {
             }
         });
         incomesTable.setFocusable(false);
-        incomesTable.setRowHeight(20);
+        incomesTable.setRowHeight(30);
         jScrollPane1.setViewportView(incomesTable);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
