@@ -65,4 +65,9 @@ public class InComesModel {
         );
         return dBManager.setQuery(sqlString);
     }
+
+    public boolean deteteInComes(int id) {
+        String sqlString = "DELETE FROM incomes WHERE id="+id;
+        return dBManager.setQuery(sqlString);
+    }
 }

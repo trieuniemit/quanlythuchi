@@ -5,14 +5,12 @@ import Library.WordWrapCellRenderer;
 import Library.State;
 import Model.InComesModel;
 import entity.InCome;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Calendar;
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -26,7 +24,8 @@ import javax.swing.table.DefaultTableModel;
 public class InComes extends javax.swing.JPanel {
     InComesModel inComesModel = new InComesModel();
     HashMap minMaxDate;
-    
+    ArrayList<InCome> inComeShowInTable;
+            
     int currentMonth = 0;
     int currentYear = 0;
     
@@ -60,6 +59,8 @@ public class InComes extends javax.swing.JPanel {
             btnNextMonth.setVisible(false);
             initControlDate();
         }).start();
+        
+        btnDelete.setVisible(false);
     }
     
     private  void initTableStyles() {
@@ -85,14 +86,13 @@ public class InComes extends javax.swing.JPanel {
     }
     
     private void getAllInComes() {
-        ArrayList<InCome> allInComes = inComesModel.getAllInComes();
-        showInComesToTable(allInComes);
+        inComeShowInTable = inComesModel.getAllInComes();
+        showInComesToTable(inComeShowInTable);
     }
     
     private void showInComesToTable(ArrayList<InCome> data) {
         DefaultTableModel tableModel = (DefaultTableModel) incomesTable.getModel();
         tableModel.setRowCount(0);
-         
         int rowIndex = 0;
         for(InCome row: data) {
             tableModel.addRow(new Object[] {++rowIndex, row.getTitle(), Helper.currencyFormat(row.getAmount()), row.getNote(), row.getDatetime()});
@@ -114,8 +114,8 @@ public class InComes extends javax.swing.JPanel {
             btnNextMonth.setVisible(true);
         }
         
-        ArrayList<InCome> inComeByMonthYear = inComesModel.getInComesByMonth(currentMonth, currentYear);
-        showInComesToTable(inComeByMonthYear);
+        inComeShowInTable = inComesModel.getInComesByMonth(currentMonth, currentYear);
+        showInComesToTable(inComeShowInTable);
     }
     
     /**
@@ -142,10 +142,11 @@ public class InComes extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         incomesTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        btnAddNew = new javax.swing.JButton();
         btnViewAll = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
+        btnAddNew = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JLabel();
         panelControlDate = new javax.swing.JPanel();
         btnPrevMonth = new javax.swing.JLabel();
         lbMonthYear = new javax.swing.JLabel();
@@ -264,7 +265,7 @@ public class InComes extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -273,21 +274,14 @@ public class InComes extends javax.swing.JPanel {
         });
         incomesTable.setFocusable(false);
         incomesTable.setRowHeight(30);
+        incomesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                incomesTableMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(incomesTable);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        btnAddNew.setBackground(new java.awt.Color(0, 102, 102));
-        btnAddNew.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnAddNew.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddNew.setText("Thêm mới");
-        btnAddNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddNew.setFocusable(false);
-        btnAddNew.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnAddNewMousePressed(evt);
-            }
-        });
 
         btnViewAll.setBackground(new java.awt.Color(0, 102, 102));
         btnViewAll.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -303,6 +297,7 @@ public class InComes extends javax.swing.JPanel {
 
         searchField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         searchField.setText("Nhập từ khóa...");
+        searchField.setPreferredSize(new java.awt.Dimension(102, 31));
 
         btnSearch.setBackground(new java.awt.Color(0, 102, 102));
         btnSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -316,6 +311,22 @@ public class InComes extends javax.swing.JPanel {
             }
         });
 
+        btnAddNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/plus.png"))); // NOI18N
+        btnAddNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddNew.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnAddNewMousePressed(evt);
+            }
+        });
+
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/delete.png"))); // NOI18N
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnDeleteMousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -323,12 +334,14 @@ public class InComes extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnAddNew)
-                .addGap(18, 18, 18)
-                .addComponent(btnViewAll)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
-                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDelete)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSearch)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnViewAll)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -336,15 +349,12 @@ public class InComes extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(searchField)
-                        .addGap(1, 1, 1))
-                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                            .addComponent(btnAddNew, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                            .addComponent(btnViewAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(btnAddNew, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnViewAll, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -380,7 +390,7 @@ public class InComes extends javax.swing.JPanel {
                 .addComponent(btnPrevMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(312, 312, 312)
                 .addComponent(lbMonthYear, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
                 .addComponent(btnNextMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         panelControlDateLayout.setVerticalGroup(
@@ -461,11 +471,6 @@ public class InComes extends javax.swing.JPanel {
         panelControlDate.setPreferredSize(new Dimension(487, 24));
     }//GEN-LAST:event_btnSearchMousePressed
 
-    private void btnAddNewMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddNewMousePressed
-        addNewDialog.setLocationRelativeTo(null);
-        addNewDialog.show();
-    }//GEN-LAST:event_btnAddNewMousePressed
-
     private void btnResetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMousePressed
         titleFiled.setText("");
         noteField.setText("");
@@ -487,19 +492,52 @@ public class InComes extends javax.swing.JPanel {
         
         boolean resuilt = inComesModel.insertNewInCome(inCome);
         if(resuilt) {
-            showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            //showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             initControlDate();
+            titleFiled.setText("");
+            noteField.setText("");
+            amountField.setText("");
             addNewDialog.dispose();
         } else {
             showMessageDialog(addNewDialog, "Có lỗi trong quá trình thêm vào bảng thu nhập.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSaveMousePressed
 
+    private void btnAddNewMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddNewMousePressed
+        addNewDialog.setLocationRelativeTo(null);
+        addNewDialog.show();
+    }//GEN-LAST:event_btnAddNewMousePressed
+
+    private void incomesTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_incomesTableMousePressed
+        if(incomesTable.getSelectedRow() >= 0) {
+            btnDelete.setVisible(true);
+        }
+    }//GEN-LAST:event_incomesTableMousePressed
+
+    private void btnDeleteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMousePressed
+        int resuiltConfirm = JOptionPane.showConfirmDialog(panelControlDate, "Bạn có chắc chắn muốn xóa các mục đã chọn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if(resuiltConfirm != 1) {
+            
+            int[] selectedRows = incomesTable.getSelectedRows();
+            //delete in database
+            for(int row: selectedRows) {
+                inComesModel.deteteInComes(inComeShowInTable.get(row).getId());
+            }
+            
+            //delete in table
+            DefaultTableModel tableModel = (DefaultTableModel) incomesTable.getModel();
+            for(int i = selectedRows.length - 1; i>=0; i--) {
+                tableModel.removeRow(selectedRows[i]);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteMousePressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog addNewDialog;
     private javax.swing.JTextField amountField;
-    private javax.swing.JButton btnAddNew;
+    private javax.swing.JLabel btnAddNew;
+    private javax.swing.JLabel btnDelete;
     private javax.swing.JLabel btnNextMonth;
     private javax.swing.JLabel btnPrevMonth;
     private javax.swing.JButton btnReset;
