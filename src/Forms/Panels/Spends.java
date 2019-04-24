@@ -28,8 +28,12 @@ public class Spends extends javax.swing.JPanel {
         initComponents();
         showDataWithMonth();
     }
+    private void fillDataToTable(){
+        
+    }
     
-    private void fillDataToTable() {
+    private void showData(){
+        ArrayList<Spend> data = spendsModel.getAllSpends();
         DefaultTableModel tableModel = (DefaultTableModel) tableSpends.getModel();
         tableModel.setRowCount(0);
         int indexID=1;
