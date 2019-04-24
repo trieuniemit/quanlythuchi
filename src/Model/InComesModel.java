@@ -70,4 +70,9 @@ public class InComesModel {
         String sqlString = "DELETE FROM incomes WHERE id="+id;
         return dBManager.setQuery(sqlString);
     }
+    
+    public boolean updateInComesCol(int id, String col, String value) {
+        String sqlString = dBManager.securceSql("UPDATE incomes SET `" + col + "`={$} WHERE id="+id, value);
+        return dBManager.setQuery(sqlString);
+    }
 }

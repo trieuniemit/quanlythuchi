@@ -14,6 +14,9 @@ import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,7 +27,7 @@ import javax.swing.table.DefaultTableModel;
 public class InComes extends javax.swing.JPanel {
     InComesModel inComesModel = new InComesModel();
     HashMap minMaxDate;
-    ArrayList<InCome> inComeShowInTable;
+    public static ArrayList<InCome> inComeShowInTable;
             
     int currentMonth = 0;
     int currentYear = 0;
@@ -60,7 +63,10 @@ public class InComes extends javax.swing.JPanel {
             initControlDate();
         }).start();
         
+        //set visible for delete button
         btnDelete.setVisible(false);
+        //add event for edit table
+        incomesTable.getModel().addTableModelListener(new InComesTableModelListener(incomesTable));
     }
     
     private  void initTableStyles() {
@@ -265,13 +271,14 @@ public class InComes extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        incomesTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         incomesTable.setFocusable(false);
         incomesTable.setRowHeight(30);
         incomesTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -559,4 +566,35 @@ public class InComes extends javax.swing.JPanel {
     private javax.swing.JTextField searchField;
     private javax.swing.JTextField titleFiled;
     // End of variables declaration//GEN-END:variables
+}
+
+
+
+
+class InComesTableModelListener implements TableModelListener {
+  JTable table;
+  InComesModel inComesModel = new InComesModel();
+  
+  InComesTableModelListener(JTable table) {
+    this.table = table;
+  }
+
+  @Override
+  public void tableChanged(TableModelEvent e) {
+    int firstRow = e.getFirstRow();
+    int column = e.getColumn();
+    String[] colsInDb = {"title", "amount", "note", "datetime"};
+    
+    if (e.getType() == TableModelEvent.UPDATE) {
+        int currentInComeId = InComes.inComeShowInTable.get(firstRow).getId();
+        String value = table.getValueAt(firstRow, column).toString();
+        if(column == 2) { //is amount
+            value = value.replaceAll("[^\\d.]", "");
+        }
+        boolean resuilt = inComesModel.updateInComesCol(currentInComeId, colsInDb[column-1], value);
+        
+        if(!resuilt) 
+            showMessageDialog(table, "Có lỗi trong quá trình cập nhật, vui lòng kiểm tra lại dữ liệu nhập vào.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+    }
+  }
 }

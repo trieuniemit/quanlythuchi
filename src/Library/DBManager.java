@@ -98,7 +98,7 @@ public class DBManager {
     
     public String securceSql(String sqlQuery, String[] params) {
         for(int i = 1; i <= params.length; i ++) {
-            String replaceChars = params[i-1].replaceAll("[,'`\"\";:<>=]", "");
+            String replaceChars = params[i-1].replaceAll("[,'`\"\";<>=]", "");
             sqlQuery = sqlQuery.replace("{$"+i+"}", "'" + replaceChars + "'");
         }
         
@@ -106,7 +106,7 @@ public class DBManager {
     }
     
     public String securceSql(String sqlQuery, String value) {
-        String replaceChars = value.replaceAll("[,'`\"\";:<>=]", "");
+        String replaceChars = value.replaceAll("[,'`\"\";<>=]", "");
         sqlQuery = sqlQuery.replace("{$}", "'" + replaceChars + "'");
         return sqlQuery;
     }
