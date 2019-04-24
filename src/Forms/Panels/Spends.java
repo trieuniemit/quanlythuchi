@@ -1,6 +1,5 @@
 package Forms.Panels;
 
-import Library.DBManager;
 import Library.Helper;
 import Library.State;
 import Model.SpendModel;
@@ -20,6 +19,8 @@ public class Spends extends javax.swing.JPanel {
     int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     SpendModel spendsModel = new SpendModel();
+    
+    ArrayList<Spend> spendsData;
     /**
      * Creates new form InComes
      */
@@ -27,27 +28,21 @@ public class Spends extends javax.swing.JPanel {
         initComponents();
         showDataWithMonth();
     }
-    private void showData(){
-        ArrayList<Spend> data = spendsModel.getAllSpends();
+    
+    private void fillDataToTable() {
         DefaultTableModel tableModel = (DefaultTableModel) tableSpends.getModel();
         tableModel.setRowCount(0);
-        
-        for(Spend row : data){
-            Object[] rowValues = {row.getId(),row.getTitle(),row.getNote(),row.getAmount(),row.getDatetime()};
+        int indexID=1;
+        for(Spend row : spendsData){
+            Object[] rowValues = {indexID,row.getTitle(),row.getNote(),Helper.currencyFormat(row.getAmount()),row.getDatetime()};
             tableModel.addRow(rowValues);
+            indexID++;
         }
     }
-    
     private void showDataWithMonth(){
         lbDate.setText(Helper.monthsInYear[currentMonth-1] + " - "+currentYear);
-        ArrayList<Spend> data = spendsModel.getMonthYear(currentMonth, currentYear);
-        DefaultTableModel tableModel = (DefaultTableModel) tableSpends.getModel();
-        tableModel.setRowCount(0);
-        
-        for(Spend row : data){
-            Object[] rowValues = {row.getId(),row.getTitle(),row.getNote(),Helper.currencyFormat(row.getAmount()),row.getDatetime()};
-            tableModel.addRow(rowValues);
-        }
+        spendsData = spendsModel.getMonthYear(currentMonth, currentYear);
+        fillDataToTable();
     }
     
     /**
@@ -210,9 +205,19 @@ public class Spends extends javax.swing.JPanel {
 
         btnDeleteSpend.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         btnDeleteSpend.setText("Xóa");
+        btnDeleteSpend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSpendActionPerformed(evt);
+            }
+        });
 
         btnFindSpend.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         btnFindSpend.setText("Tìm kiếm");
+        btnFindSpend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindSpendActionPerformed(evt);
+            }
+        });
 
         tbFindSpend.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
 
@@ -310,6 +315,10 @@ public class Spends extends javax.swing.JPanel {
         dialogAdd.show();
         btnAdd.setText("Sửa");
         lbTittle.setText("Sửa chi tiêu");
+        Spend spend = spendsData.get(tableSpends.getSelectedRow());
+        txtTittle.setText(spend.getTitle());
+        txtAmount.setText(spend.getAmount()+"");
+        txtareaNotes.setText(spend.getNote());
     }//GEN-LAST:event_btnEditSpendActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -333,13 +342,16 @@ public class Spends extends javax.swing.JPanel {
                 txtTittle.getText(),
                 txtareaNotes.getText()
         );
-        if(btnAdd.getText() == "Thêm"){
-        spendsModel.insertSpend(spend);
-        showDataWithMonth();
-        dialogAdd.dispose();
+        
+        if( btnAdd.getText() == "Thêm"){
+            spendsModel.insertSpend(spend);
+            showDataWithMonth();
+            dialogAdd.dispose();
         }
         else{
-            tableSpends.getSelectedRow();
+            int spendId = spendsData.get(tableSpends.getSelectedRow()).getId();
+            spend.setId(spendId);
+            
             spendsModel.updateSpend(spend);
             showDataWithMonth();
             dialogAdd.dispose();
@@ -355,6 +367,27 @@ public class Spends extends javax.swing.JPanel {
         txtAmount.setText("");
         txtareaNotes.setText("");
     }//GEN-LAST:event_btnRetypeActionPerformed
+
+    private void btnFindSpendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindSpendActionPerformed
+        // TODO add your handling code here:
+        String tbFind = tbFindSpend.getText();
+        spendsData = spendsModel.findSpends(tbFind);
+        fillDataToTable();
+    }//GEN-LAST:event_btnFindSpendActionPerformed
+
+    private void btnDeleteSpendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSpendActionPerformed
+        // TODO add your handling code here:
+        int[] selectedRows = tableSpends.getSelectedRows();
+        int result = JOptionPane.showConfirmDialog(btnDeleteSpend, "Bạn có thực sự muốn xóa hay không ?","Cảnh báo !", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+        if(result == 0)
+        {
+            for(int i : selectedRows){
+                spendsModel.deleteSpend(spendsData.get(i).getId());
+            }
+        
+            showDataWithMonth();
+        }
+    }//GEN-LAST:event_btnDeleteSpendActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -381,4 +414,5 @@ public class Spends extends javax.swing.JPanel {
     private javax.swing.JTextField txtTittle;
     private javax.swing.JTextArea txtareaNotes;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -21,7 +21,7 @@ public class SpendModel {
     
     public ArrayList<Spend> getAllSpends(){
         ArrayList<Spend> spends = new ArrayList<>();
-        String sqlQuery = "SELECT * From Spends where user_id = 2"; 
+        String sqlQuery = "SELECT * From Spends where user_id = "+State.currentUser.getId();
         ArrayList<HashMap> dbData = dBManager.getQuery(sqlQuery);
         
         for(HashMap row : dbData){
@@ -36,12 +36,18 @@ public class SpendModel {
         return spends;
     }
     
+    
     public boolean insertSpend(Spend spend){
         
         String sqlQuery = dBManager.securceSql(
                 "INSERT INTO Spends (user_id,title,note,amount) VALUES({$1},{$2},{$3},{$4})",
                 new String[]{State.currentUser.getId()+"",spend.getTitle(),spend.getNote(),spend.getAmount()+""}
         );
+        return dBManager.setQuery(sqlQuery);
+    }
+    
+    public boolean deleteSpend(int id){
+        String sqlQuery = "DELETE From Spends Where id = "+id;
         return dBManager.setQuery(sqlQuery);
     }
     
@@ -53,9 +59,9 @@ public class SpendModel {
         return dBManager.setQuery(sqlQuery);
     }
     
-    public ArrayList<Spend> getMonthYear(int month, int year){
+    public ArrayList<Spend> findSpends(String tbFindSpend){
         ArrayList<Spend> spends = new ArrayList<>();
-        String sqlQuery = dBManager.securceSql("SELECT * From Spends where Year(datetime)={$1} AND MONTH(datetime)={$2}", new String[]{year+"",month+""});
+        String sqlQuery = dBManager.securceSql("SELECT * From Spends where title like {$}", "%"+tbFindSpend+"%");
         
         ArrayList<HashMap> dbData = dBManager.getQuery(sqlQuery);
         
@@ -68,7 +74,26 @@ public class SpendModel {
                 row.get("datetime").toString()
             ));
         }
+        return spends;
+    }
+    
+    public ArrayList<Spend> getMonthYear(int month, int year){
+        ArrayList<Spend> spends = new ArrayList<>();
+        String sqlQuery = dBManager.securceSql("SELECT * From Spends where Year(datetime)={$1} AND MONTH(datetime)={$2} and user_id = {$3}",
+                new String[]{year+"",month+"",State.currentUser.getId()+"",}
+        );
         
+        ArrayList<HashMap> dbData = dBManager.getQuery(sqlQuery);
+        
+        for(HashMap row : dbData){
+            spends.add(new Spend(
+                (int)row.get("id"),
+                (int)row.get("amount"),
+                row.get("title").toString(),
+                row.get("note").toString(),
+                row.get("datetime").toString()
+            ));
+        }
         return spends;
     }
 }

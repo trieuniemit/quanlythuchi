@@ -14,6 +14,11 @@ public class Spend {
 
     public Spend() {
     }
+
+    public Spend(int id) {
+        this.id = id;
+    }
+    
     
     public Spend(int id, int userId,int amount, String title, String note, String datetime) {
         this.id = id;
