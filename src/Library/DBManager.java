@@ -35,6 +35,7 @@ public class DBManager {
         } catch (SQLException | ClassNotFoundException ex) {
             System.err.println("ERROR: Can't connect to database! :))");
             showMessageDialog(null, "Không thể kết nối đến cơ sở dữ liệu!", "Thông báo!", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         }
     }
     

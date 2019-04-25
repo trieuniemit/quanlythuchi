@@ -13,4 +13,8 @@ public class Helper {
         DecimalFormat formatter = new DecimalFormat("###,###,###");
         return formatter.format(amount)+" VNĐ";
     }
+    
+    public static String rmNotNumber(String str) {
+        return str.replaceAll("[^\\d.]", "");
+    }
 }

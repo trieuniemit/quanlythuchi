@@ -4,36 +4,39 @@ package Entity;
  *
  * @author Trieu Tai Niem
  */
-public class InCome {
+public class Debt {
     private int id;
     private int userId;
     private int amount;
     private String title;
     private String note;
+    private int status;
     private String datetime;
 
-    public InCome() {
+    public Debt() {
     }
     
-    public InCome(String title, String note, int amount) {
+    public Debt(String title, String note, int amount) {
         this.amount = amount;
         this.title = title;
         this.note = note;
+        this.status = 0;
     }
     
-    public InCome(int userId, String title, String note, int amount) {
+    public Debt(int userId, String title, String note, int amount) {
         this.amount = amount;
         this.title = title;
         this.note = note;
         this.userId = userId;
     }
     
-    public InCome(int id, int userId, String title, String note, int amount, String datetime) {
+    public Debt(int id, int userId, String title, String note, int amount, String datetime, int status) {
         this.id = id;
         this.amount = amount;
         this.userId = userId;
         this.title = title;
         this.note = note;
+        this.status = status;
         this.datetime = datetime;
     }
 
@@ -84,5 +87,14 @@ public class InCome {
     public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
     
 }

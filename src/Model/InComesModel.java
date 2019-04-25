@@ -2,7 +2,7 @@ package Model;
 
 import Library.DBManager;
 import Library.State;
-import entity.InCome;
+import Entity.InCome;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -63,6 +63,14 @@ public class InComesModel {
             "INSERT INTO incomes(`user_id`, `title`, `note`, `amount`) VALUES({$1},{$2}, {$3}, {$4})", 
             new String[] {inCome.getUserId() + "", inCome.getTitle(), inCome.getNote(), inCome.getAmount()+""}
         );
+        
+        if(inCome.getDatetime() != null) {
+            sqlString = dBManager.securceSql(
+                "INSERT INTO incomes(`user_id`, `title`, `note`, `amount`, `datetime`) VALUES({$1},{$2}, {$3}, {$4}, {$5})", 
+                new String[] {inCome.getUserId() + "", inCome.getTitle(), inCome.getNote(), inCome.getAmount()+"", inCome.getDatetime()}
+            );
+        }
+        
         return dBManager.setQuery(sqlString);
     }
 
