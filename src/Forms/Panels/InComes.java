@@ -5,6 +5,8 @@ import Library.WordWrapCellRenderer;
 import Library.State;
 import Model.InComesModel;
 import Entity.InCome;
+import Forms.MainForm;
+import Model.MainFormModel;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -26,6 +28,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InComes extends javax.swing.JPanel {
     InComesModel inComesModel = new InComesModel();
+    MainFormModel mainFormModel = new MainFormModel();
+    
     HashMap minMaxDate;
     public static ArrayList<InCome> inComeShowInTable;
             
@@ -37,6 +41,8 @@ public class InComes extends javax.swing.JPanel {
      */
     public InComes() {
         initComponents();
+        
+        //add placeholder for search field
         searchField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -105,7 +111,10 @@ public class InComes extends javax.swing.JPanel {
             total += row.getAmount();
             tableModel.addRow(new Object[] {++rowIndex, row.getTitle(), Helper.currencyFormat(row.getAmount()), row.getNote(), row.getDatetime()});
         }
+        
         totalAmount.setText(Helper.currencyFormat(total));
+        
+        State.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }
     
     public void initControlDate() {
@@ -572,6 +581,7 @@ public class InComes extends javax.swing.JPanel {
                 tableModel.removeRow(selectedRows[i]);
             }
         }
+        State.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }//GEN-LAST:event_btnDeleteMousePressed
 
 

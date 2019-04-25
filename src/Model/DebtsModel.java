@@ -35,7 +35,7 @@ public class DebtsModel {
         return convertToDebtArray(dbData);
     }
     
-    public ArrayList<Debt> getInComesByMonth(int month, int year) {
+    public ArrayList<Debt> getDebtsByMonth(int month, int year) {
         ArrayList<HashMap> dbData = dBManager.getQuery("SELECT * FROM debts WHERE YEAR(datetime) = " + year + " AND MONTH(datetime) = " + month);
         return convertToDebtArray(dbData);
     }

@@ -6,6 +6,9 @@ import Forms.Panels.InComes;
 import Forms.Panels.Loans;
 import Forms.Panels.Notes;
 import Forms.Panels.Spends;
+import Library.Helper;
+import Library.State;
+import Model.MainFormModel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -18,20 +21,23 @@ import java.awt.Point;
  */
 public class MainForm extends javax.swing.JFrame {
     User _currentUser = null;
-    private Point initialClick;
+    Point initialClick;
+    MainFormModel mainFormModel = new MainFormModel();
     
     GridBagLayout gridBagLayout = new GridBagLayout();
     Dimension contentSize;
     
-    /**
-     * @param user
-     */
     public MainForm() {
         initComponents();
         setLocationRelativeTo(null);
         contentSize = TabContent.getSize();
+        //
+        State.userAmount = lbTotal;
+        
         initTabContent(new InComes());
         TabBarItem1.setBackground(new Color(0, 153, 153));
+        lbUsername.setText(State.currentUser.getUsername().toUpperCase());
+        lbTotal.setText(Helper.currencyFormat(mainFormModel.totalUserAmount()));
     }
 
     private void initTabContent(javax.swing.JPanel panel) {
@@ -74,7 +80,7 @@ public class MainForm extends javax.swing.JFrame {
         ItemLabel4 = new javax.swing.JLabel();
         ItemIcon4 = new javax.swing.JLabel();
         lbUsername = new javax.swing.JLabel();
-        tbTotal = new javax.swing.JLabel();
+        lbTotal = new javax.swing.JLabel();
         TabBarItem5 = new javax.swing.JPanel();
         ItemLabel5 = new javax.swing.JLabel();
         ItemIcon5 = new javax.swing.JLabel();
@@ -238,11 +244,11 @@ public class MainForm extends javax.swing.JFrame {
         lbUsername.setForeground(new java.awt.Color(255, 255, 255));
         lbUsername.setText("TRIEUNIEMIT");
 
-        tbTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tbTotal.setForeground(new java.awt.Color(204, 204, 204));
-        tbTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/dollar.png"))); // NOI18N
-        tbTotal.setText("9.999.999.999");
-        tbTotal.setToolTipText("");
+        lbTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbTotal.setForeground(new java.awt.Color(204, 204, 204));
+        lbTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/dollar.png"))); // NOI18N
+        lbTotal.setText("9.999.999.999");
+        lbTotal.setToolTipText("");
 
         TabBarItem5.setBackground(new java.awt.Color(0, 102, 102));
         TabBarItem5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -301,7 +307,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(TabBarLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(TabBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                            .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                             .addComponent(lbUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
@@ -311,7 +317,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(lbUsername)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54)
                 .addComponent(TabBarItem1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
@@ -351,7 +357,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         ContainerLayout.setVerticalGroup(
             ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
+            .addComponent(TabBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContainerLayout.createSequentialGroup()
                 .addGap(0, 19, Short.MAX_VALUE)
                 .addComponent(TabContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -439,8 +445,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel TabBarItem5;
     private javax.swing.JPanel TabContent;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lbTotal;
     private javax.swing.JLabel lbUsername;
-    private javax.swing.JLabel tbTotal;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

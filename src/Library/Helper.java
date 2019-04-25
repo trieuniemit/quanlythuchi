@@ -15,6 +15,6 @@ public class Helper {
     }
     
     public static String rmNotNumber(String str) {
-        return str.replaceAll("[^\\d.]", "");
+        return str.replaceAll("[^\\d]", "");
     }
 }

@@ -5,6 +5,7 @@ import Library.Helper;
 import Library.WordWrapCellRenderer;
 import Library.State;
 import Model.DebtsModel;
+import Model.MainFormModel;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -25,8 +26,10 @@ import javax.swing.table.DefaultTableModel;
  * @author Trieu Tai Niem
  */
 public class Debts extends javax.swing.JPanel {
-    DebtsModel debtsTableModel = new DebtsModel();
+    DebtsModel debtsModel = new DebtsModel();
     HashMap minMaxDate;
+    MainFormModel mainFormModel = new MainFormModel();
+    
     public static ArrayList<Debt> debtsShowInTable;
             
     int currentMonth = 0;
@@ -56,7 +59,7 @@ public class Debts extends javax.swing.JPanel {
        
         //get min max date and init current year, month
         new Thread(() -> {
-            minMaxDate = debtsTableModel.getMinMaxDate();
+            minMaxDate = debtsModel.getMinMaxDate();
             currentMonth = Integer.valueOf(minMaxDate.get("max_month").toString());
             currentYear = Integer.valueOf(minMaxDate.get("max_year").toString());
             //view all
@@ -98,11 +101,11 @@ public class Debts extends javax.swing.JPanel {
     }
     
     private void getAllDebts() {
-        debtsShowInTable = debtsTableModel.getAllDebts();
-        showInComesToTable(debtsShowInTable);
+        debtsShowInTable = debtsModel.getAllDebts();
+        showDebtsToTable(debtsShowInTable);
     }
     
-    private void showInComesToTable(ArrayList<Debt> data) {
+    private void showDebtsToTable(ArrayList<Debt> data) {
         DefaultTableModel tableModel = (DefaultTableModel) debtsTable.getModel();
         tableModel.setRowCount(0);
         int rowIndex = 0;
@@ -129,6 +132,7 @@ public class Debts extends javax.swing.JPanel {
         totalAmount.setText(Helper.currencyFormat(totalCount));
         unpaidAmount.setText(Helper.currencyFormat(unpaidCount));
         paidAmount.setText(Helper.currencyFormat(paidCount));
+        State.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }
     
     public void initControlDate() {
@@ -146,8 +150,8 @@ public class Debts extends javax.swing.JPanel {
             btnNextMonth.setVisible(true);
         }
         
-        debtsShowInTable = debtsTableModel.getInComesByMonth(currentMonth, currentYear);
-        showInComesToTable(debtsShowInTable);
+        debtsShowInTable = debtsModel.getDebtsByMonth(currentMonth, currentYear);
+        showDebtsToTable(debtsShowInTable);
     }
     
     /**
@@ -498,14 +502,14 @@ public class Debts extends javax.swing.JPanel {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(paidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(unpaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(paidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -574,8 +578,8 @@ public class Debts extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNextMonthMousePressed
 
     private void btnSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMousePressed
-        ArrayList<Debt> inComeByMonthYear = debtsTableModel.searchDebts(searchField.getText());
-        showInComesToTable(inComeByMonthYear);
+        ArrayList<Debt> inComeByMonthYear = debtsModel.searchDebts(searchField.getText());
+        showDebtsToTable(inComeByMonthYear);
         btnNextMonth.setVisible(false);
         btnPrevMonth.setVisible(false);
         lbMonthYear.setVisible(false);
@@ -611,7 +615,7 @@ public class Debts extends javax.swing.JPanel {
             0
         );
         
-        boolean resuilt = debtsTableModel.insertNewDebt(debt);
+        boolean resuilt = debtsModel.insertNewDebt(debt);
         if(resuilt) {
             //showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             initControlDate();
@@ -643,7 +647,7 @@ public class Debts extends javax.swing.JPanel {
             int[] selectedRows = debtsTable.getSelectedRows();
             //delete in database
             for(int row: selectedRows) {
-                debtsTableModel.deteteDebts(debtsShowInTable.get(row).getId());
+                debtsModel.deteteDebts(debtsShowInTable.get(row).getId());
             }
             
             //delete in table
@@ -652,6 +656,7 @@ public class Debts extends javax.swing.JPanel {
                 tableModel.removeRow(selectedRows[i]);
             }
         }
+        State.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }//GEN-LAST:event_btnDeleteMousePressed
 
 
@@ -698,7 +703,7 @@ public class Debts extends javax.swing.JPanel {
 class DebtsTableModelListener implements TableModelListener {
   Debts debtsPanel;
   JTable table;
-  DebtsModel debtsTableModelListener = new DebtsModel();
+  DebtsModel debtsModelListener = new DebtsModel();
   
   DebtsTableModelListener(JTable table, Debts debts) {
     this.table = table;
@@ -719,17 +724,19 @@ class DebtsTableModelListener implements TableModelListener {
         switch(column) {
             case 2: 
                 updateValue = Helper.rmNotNumber(value.toString());
+                Debts.debtsShowInTable.get(firstRow).setAmount(Integer.valueOf(updateValue));
                 break;
             case 4: 
                 updateValue = (boolean)table.getValueAt(firstRow, column)?"1":"0";
+                Debts.debtsShowInTable.get(firstRow).setStatus(Integer.valueOf(updateValue));
                 break;
             default:
                 updateValue = value.toString();
         }
         
-        Debts.debtsShowInTable.get(firstRow).setStatus(Integer.valueOf(updateValue));
         
-        boolean resuilt = debtsTableModelListener.updateDebtCol(currentInComeId, colsInDb[column-1], updateValue);
+        
+        boolean resuilt = debtsModelListener.updateDebtCol(currentInComeId, colsInDb[column-1], updateValue);
         if(!resuilt) 
             showMessageDialog(table, "Có lỗi trong quá trình cập nhật, vui lòng kiểm tra lại dữ liệu nhập vào.", "Thông báo", JOptionPane.ERROR_MESSAGE);
         else 
