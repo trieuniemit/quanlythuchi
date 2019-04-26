@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -85,12 +86,16 @@ public class MainForm extends javax.swing.JFrame {
         ItemLabel5 = new javax.swing.JLabel();
         ItemIcon5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        TabBarItem7 = new javax.swing.JPanel();
+        ItemLabel7 = new javax.swing.JLabel();
+        ItemIcon7 = new javax.swing.JLabel();
         TabContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý tài chính cá nhân");
         setBackground(new java.awt.Color(255, 255, 255));
         setLocation(new java.awt.Point(500, 300));
+        setResizable(false);
 
         Container.setAlignmentX(0.0F);
         Container.setAlignmentY(0.0F);
@@ -268,7 +273,7 @@ public class MainForm extends javax.swing.JFrame {
         TabBarItem5.setLayout(TabBarItem5Layout);
         TabBarItem5Layout.setHorizontalGroup(
             TabBarItem5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabBarItem5Layout.createSequentialGroup()
+            .addGroup(TabBarItem5Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(ItemIcon5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -291,6 +296,41 @@ public class MainForm extends javax.swing.JFrame {
         jLabel2.setText("<html><p style=\"text-align: center\">Deverlope by Trieu Tai Niem and Ho Sy Huy. Version 1.0</p></html>");
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        TabBarItem7.setBackground(new java.awt.Color(0, 102, 102));
+        TabBarItem7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        TabBarItem7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TabBarItem7MousePressed(evt);
+            }
+        });
+
+        ItemLabel7.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        ItemLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        ItemLabel7.setText("Đăng xuất");
+
+        ItemIcon7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/shutdown.png"))); // NOI18N
+
+        javax.swing.GroupLayout TabBarItem7Layout = new javax.swing.GroupLayout(TabBarItem7);
+        TabBarItem7.setLayout(TabBarItem7Layout);
+        TabBarItem7Layout.setHorizontalGroup(
+            TabBarItem7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabBarItem7Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ItemIcon7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ItemLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
+        );
+        TabBarItem7Layout.setVerticalGroup(
+            TabBarItem7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabBarItem7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TabBarItem7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ItemLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ItemIcon7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout TabBarLayout = new javax.swing.GroupLayout(TabBar);
         TabBar.setLayout(TabBarLayout);
         TabBarLayout.setHorizontalGroup(
@@ -310,6 +350,7 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                             .addComponent(lbUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addComponent(TabBarItem7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         TabBarLayout.setVerticalGroup(
             TabBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -328,7 +369,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(TabBarItem4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(TabBarItem5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(TabBarItem7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -357,10 +400,12 @@ public class MainForm extends javax.swing.JFrame {
         );
         ContainerLayout.setVerticalGroup(
             ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContainerLayout.createSequentialGroup()
-                .addGap(0, 19, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(TabContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(ContainerLayout.createSequentialGroup()
+                .addComponent(TabBar, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -371,9 +416,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(Container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(Container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         bindingGroup.bind();
@@ -416,6 +459,15 @@ public class MainForm extends javax.swing.JFrame {
         initTabContent(new Notes());
     }//GEN-LAST:event_TabBarItem5MousePressed
 
+    private void TabBarItem7MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabBarItem7MousePressed
+        int resuiltConfirm = JOptionPane.showConfirmDialog(this, "Bạn sẽ đăng xuất khỏi hệ thống?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if(resuiltConfirm != 1) {
+            State.currentUser = null;
+            new LoginForm().setVisible(true);
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_TabBarItem7MousePressed
+
     
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -433,16 +485,22 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel ItemIcon3;
     private javax.swing.JLabel ItemIcon4;
     private javax.swing.JLabel ItemIcon5;
+    private javax.swing.JLabel ItemIcon6;
+    private javax.swing.JLabel ItemIcon7;
     private javax.swing.JLabel ItemLabel2;
     private javax.swing.JLabel ItemLabel3;
     private javax.swing.JLabel ItemLabel4;
     private javax.swing.JLabel ItemLabel5;
+    private javax.swing.JLabel ItemLabel6;
+    private javax.swing.JLabel ItemLabel7;
     private javax.swing.JPanel TabBar;
     private javax.swing.JPanel TabBarItem1;
     private javax.swing.JPanel TabBarItem2;
     private javax.swing.JPanel TabBarItem3;
     private javax.swing.JPanel TabBarItem4;
     private javax.swing.JPanel TabBarItem5;
+    private javax.swing.JPanel TabBarItem6;
+    private javax.swing.JPanel TabBarItem7;
     private javax.swing.JPanel TabContent;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lbTotal;

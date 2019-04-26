@@ -2,7 +2,7 @@ package Forms.Panels;
 
 import Entity.Debt;
 import Library.Helper;
-import Library.WordWrapCellRenderer;
+//import Library.WordWrapCellRenderer;
 import Library.State;
 import Model.DebtsModel;
 import Model.MainFormModel;
@@ -59,9 +59,6 @@ public class Debts extends javax.swing.JPanel {
        
         //get min max date and init current year, month
         new Thread(() -> {
-            minMaxDate = debtsModel.getMinMaxDate();
-            currentMonth = Integer.valueOf(minMaxDate.get("max_month").toString());
-            currentYear = Integer.valueOf(minMaxDate.get("max_year").toString());
             //view all
             getAllDebts();
             btnNextMonth.setVisible(false);
@@ -86,10 +83,10 @@ public class Debts extends javax.swing.JPanel {
         debtsTable.getColumnModel().getColumn(5).setPreferredWidth(150);
         
         //set padding and wrap word for table cell
-        for(int i = 0; i < debtsTable.getColumnCount(); i++) {
-            if(i == 4) continue;
-            debtsTable.getColumnModel().getColumn(i).setCellRenderer(new WordWrapCellRenderer());
-        }
+//        for(int i = 0; i < debtsTable.getColumnCount(); i++) {
+//            if(i == 4) continue;
+//            debtsTable.getColumnModel().getColumn(i).setCellRenderer(new WordWrapCellRenderer());
+//        }
         
         //set align for column of table
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -118,6 +115,7 @@ public class Debts extends javax.swing.JPanel {
                 unpaidCount += row.getAmount();
             }
             
+            System.out.println(totalCount);
             tableModel.addRow(new Object[] {
                 ++rowIndex, 
                 row.getTitle(), 
@@ -132,10 +130,14 @@ public class Debts extends javax.swing.JPanel {
         totalAmount.setText(Helper.currencyFormat(totalCount));
         unpaidAmount.setText(Helper.currencyFormat(unpaidCount));
         paidAmount.setText(Helper.currencyFormat(paidCount));
-        State.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
+        Helper.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }
     
     public void initControlDate() {
+        minMaxDate = debtsModel.getMinMaxDate();
+        currentMonth = Integer.valueOf(minMaxDate.get("max_month").toString());
+        currentYear = Integer.valueOf(minMaxDate.get("max_year").toString());
+        
         lbMonthYear.setText(Helper.monthsInYear[currentMonth-1] + ", "+ currentYear);
         
         if(currentMonth == Integer.parseInt(minMaxDate.get("min_month").toString()) && currentYear == Integer.parseInt(minMaxDate.get("min_year").toString())) {
@@ -199,12 +201,15 @@ public class Debts extends javax.swing.JPanel {
 
         addNewDialog.setTitle("Thêm thu nhập mới");
         addNewDialog.setAlwaysOnTop(true);
+        addNewDialog.setMaximumSize(new java.awt.Dimension(390, 357));
         addNewDialog.setMinimumSize(new java.awt.Dimension(390, 357));
+        addNewDialog.setPreferredSize(new java.awt.Dimension(390, 357));
+        addNewDialog.setResizable(false);
         addNewDialog.setType(java.awt.Window.Type.POPUP);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Thêm thu nhập");
+        jLabel2.setText("Thêm khoản vay");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Tiêu đề");
@@ -254,27 +259,27 @@ public class Debts extends javax.swing.JPanel {
             addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(addNewDialogLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addNewDialogLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(102, 102, 102)
                         .addComponent(btnReset)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSave)
-                        .addContainerGap(134, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(addNewDialogLayout.createSequentialGroup()
                         .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel5)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                         .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(amountField)
                             .addComponent(dateField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                             .addComponent(titleFiled))
-                        .addContainerGap())))
+                        .addGap(20, 20, 20))))
         );
         addNewDialogLayout.setVerticalGroup(
             addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,11 +302,11 @@ public class Debts extends javax.swing.JPanel {
                 .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -533,12 +538,12 @@ public class Debts extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(panelControlDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -624,6 +629,8 @@ public class Debts extends javax.swing.JPanel {
             amountField.setText("");
             addNewDialog.dispose();
             initControlDate();
+            lbMonthYear.setVisible(true);
+            btnViewAll.setText("Xem tất cả");
         } else {
             showMessageDialog(addNewDialog, "Có lỗi trong quá trình thêm vào bảng thu nhập.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
         }
@@ -656,7 +663,7 @@ public class Debts extends javax.swing.JPanel {
                 tableModel.removeRow(selectedRows[i]);
             }
         }
-        State.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
+        Helper.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }//GEN-LAST:event_btnDeleteMousePressed
 
 
@@ -739,7 +746,7 @@ class DebtsTableModelListener implements TableModelListener {
         boolean resuilt = debtsModelListener.updateDebtCol(currentInComeId, colsInDb[column-1], updateValue);
         if(!resuilt) 
             showMessageDialog(table, "Có lỗi trong quá trình cập nhật, vui lòng kiểm tra lại dữ liệu nhập vào.", "Thông báo", JOptionPane.ERROR_MESSAGE);
-        else 
+        else
             debtsPanel.initControlDate();
     }
   }

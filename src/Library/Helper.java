@@ -17,4 +17,8 @@ public class Helper {
     public static String rmNotNumber(String str) {
         return str.replaceAll("[^\\d]", "");
     }
+    
+    public static void updateUserTotalAmountInUI(int amount) {
+        State.userAmount.setText(Helper.currencyFormat(amount));
+    }
 }

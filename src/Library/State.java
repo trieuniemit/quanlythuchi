@@ -11,8 +11,4 @@ import javax.swing.JLabel;
 public class State {
     public static User currentUser = new User();
     public static JLabel userAmount;
-    
-    public static void updateUserTotalAmountInUI(int amount) {
-        userAmount.setText(Helper.currencyFormat(amount));
-    }
 }

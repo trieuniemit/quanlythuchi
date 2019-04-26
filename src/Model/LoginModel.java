@@ -1,5 +1,6 @@
 package Model;
 
+import Entity.User;
 import Library.DBManager;
 import java.util.HashMap;
 
@@ -11,12 +12,20 @@ import java.util.HashMap;
 public class LoginModel {
     DBManager _dBManager = new DBManager();
     
-    public HashMap<String, Object> loginUser(String userName, String password) {
+    public User loginUser(String userName, String password) {
         String sqlQuery = _dBManager.securceSql(
             "SELECT * FROM users WHERE username={$1} AND password={$2}",
             new String[]{userName, password}
         );
-        
-        return _dBManager.getSingleRow(sqlQuery);
+        HashMap<String, Object> loginResuilt = _dBManager.getSingleRow(sqlQuery);
+        if(!loginResuilt.isEmpty()) 
+            return new User(
+                (int) loginResuilt.get("id"),
+                loginResuilt.get("username").toString(), 
+                loginResuilt.get("password").toString(),
+                loginResuilt.get("created_at").toString()
+            );
+        else 
+            return null;
     }
 }

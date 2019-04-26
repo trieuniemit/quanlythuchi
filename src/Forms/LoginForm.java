@@ -36,6 +36,7 @@ public class LoginForm extends javax.swing.JFrame {
         setTitle("Quản lý thu nhập cá nhân");
         setLocation(new java.awt.Point(500, 300));
         setName("loginFrame"); // NOI18N
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -45,8 +46,11 @@ public class LoginForm extends javax.swing.JFrame {
         tbUsername.setText("trieuniemit");
         tbUsername.setToolTipText("Tên đăng nhập");
 
+        btnLogin.setBackground(new java.awt.Color(0, 102, 102));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Đăng nhập");
+        btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLogin.setFocusable(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -54,8 +58,11 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        btnClear.setBackground(new java.awt.Color(255, 153, 102));
         btnClear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(255, 255, 255));
         btnClear.setText("Nhập lại");
+        btnClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClear.setFocusable(false);
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,17 +150,9 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         
-        HashMap<String, Object> loginResuilt = loginModel.loginUser(tbUsername.getText(), tbPassword.getText());
-        if(!loginResuilt.isEmpty()) {
-            User logedInUser = new User(
-                (int) loginResuilt.get("id"),
-                loginResuilt.get("username").toString(), 
-                loginResuilt.get("password").toString(),
-                loginResuilt.get("created_at").toString()
-            );
-            
+        User logedInUser = loginModel.loginUser(tbUsername.getText(), tbPassword.getText());
+        if(logedInUser != null) {
             State.currentUser = logedInUser;
-            
             //instance new from and set it's visible
             new MainForm().setVisible(true);
             //hide current form

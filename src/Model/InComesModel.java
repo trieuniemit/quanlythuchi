@@ -3,7 +3,9 @@ package Model;
 import Library.DBManager;
 import Library.State;
 import Entity.InCome;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -46,15 +48,23 @@ public class InComesModel {
     
     public HashMap getMinMaxDate() {
         HashMap minMaxDate = dBManager.getSingleRow("SELECT MIN(datetime) AS min_date, MAX(datetime) AS max_date FROM incomes");
-        String maxDate = minMaxDate.get("max_date").toString();
-        String minDate = minMaxDate.get("min_date").toString();
+        String maxDate = "", minDate = "";
+        try {
+            maxDate = minMaxDate.get("max_date").toString();
+            minDate = minMaxDate.get("min_date").toString();
+        } catch(Exception e) {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date currentDate = new Date();
+            String strDate = sdfDate.format(currentDate);
+            maxDate =  minDate = strDate;
+        }
         
         HashMap returnData = new HashMap();
-        
         returnData.put("max_year", maxDate.substring(0,4));
         returnData.put("max_month", maxDate.substring(5,7));
         returnData.put("min_year", minDate.substring(0,4));
         returnData.put("min_month", minDate.substring(5,7));
+        System.out.println(returnData);
         return returnData;
     }
     
@@ -81,6 +91,7 @@ public class InComesModel {
     
     public boolean updateInComesCol(int id, String col, String value) {
         String sqlString = dBManager.securceSql("UPDATE incomes SET `" + col + "`={$} WHERE id="+id, value);
+        System.out.println(sqlString);
         return dBManager.setQuery(sqlString);
     }
 }

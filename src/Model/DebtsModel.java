@@ -3,6 +3,7 @@ package Model;
 import Library.DBManager;
 import Library.State;
 import Entity.Debt;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,20 +51,24 @@ public class DebtsModel {
         HashMap minMaxDate = dBManager.getSingleRow("SELECT MIN(datetime) AS min_date, MAX(datetime) AS max_date FROM debts");
         
         String maxDate = "", minDate = "";
-        if(!minMaxDate.isEmpty() && minMaxDate.get("max_date") != null) {
+        try {
             maxDate = minMaxDate.get("max_date").toString();
             minDate = minMaxDate.get("min_date").toString();
-        } else {
+        } catch(Exception e) {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date currentDate = new Date();
-            maxDate = currentDate.toString();
-            minDate = currentDate.toString();
+            String strDate = sdfDate.format(currentDate);
+            maxDate =  minDate = strDate;
         }
+        
         HashMap returnData = new HashMap();
         returnData.put("max_year", maxDate.substring(0,4));
         returnData.put("max_month", maxDate.substring(5,7));
         returnData.put("min_year", minDate.substring(0,4));
         returnData.put("min_month", minDate.substring(5,7));
+        
         System.out.println(returnData);
+        
         return returnData;
     }
     
