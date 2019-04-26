@@ -8,22 +8,25 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private  String createdAt;
+    private String createdAt;
+    private int role;
 
     public User() {
     }
 
-    public User(int id, String username, String password, String createdAt) {
+    public User(int id, String username, String password, int role, String createdAt) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = role;
         this.createdAt = createdAt;
     }
     
-    public User(int id, String username, String password) {
+    public User(int id, String username, String password, int role) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public int getId() {
@@ -40,6 +43,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     public String getPassword() {

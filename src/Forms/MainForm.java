@@ -6,6 +6,7 @@ import Forms.Panels.InComes;
 import Forms.Panels.Loans;
 import Forms.Panels.Notes;
 import Forms.Panels.Spends;
+import Forms.Panels.Users;
 import Library.Helper;
 import Library.State;
 import Model.MainFormModel;
@@ -39,6 +40,9 @@ public class MainForm extends javax.swing.JFrame {
         TabBarItem1.setBackground(new Color(0, 153, 153));
         lbUsername.setText(State.currentUser.getUsername().toUpperCase());
         lbTotal.setText(Helper.currencyFormat(mainFormModel.totalUserAmount()));
+        
+        if(State.currentUser.getRole() != 1) 
+            TabBarItem8.setVisible(false);
     }
 
     private void initTabContent(javax.swing.JPanel panel) {
@@ -59,6 +63,7 @@ public class MainForm extends javax.swing.JFrame {
         TabBarItem3.setBackground(new Color(0, 102,102));
         TabBarItem4.setBackground(new Color(0, 102,102));
         TabBarItem5.setBackground(new Color(0, 102,102));
+        TabBarItem8.setBackground(new Color(0, 102,102));
     }
     
     @SuppressWarnings("unchecked")
@@ -507,6 +512,9 @@ public class MainForm extends javax.swing.JFrame {
 
     private void TabBarItem8MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabBarItem8MousePressed
         // TODO add your handling code here:
+        resetTabItemStyle();
+        evt.getComponent().setBackground(new Color(0, 153, 153));
+        initTabContent(new Users());
     }//GEN-LAST:event_TabBarItem8MousePressed
 
     

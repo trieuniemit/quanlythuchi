@@ -97,7 +97,7 @@ public class Debts extends javax.swing.JPanel {
         debtsTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
     }
     
-    private void getAllDebts() {
+    public void getAllDebts() {
         debtsShowInTable = debtsModel.getAllDebts();
         showDebtsToTable(debtsShowInTable);
     }
@@ -133,11 +133,12 @@ public class Debts extends javax.swing.JPanel {
         Helper.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }
     
-    public void initControlDate() {
-        minMaxDate = debtsModel.getMinMaxDate();
-        currentMonth = Integer.valueOf(minMaxDate.get("max_month").toString());
-        currentYear = Integer.valueOf(minMaxDate.get("max_year").toString());
-        
+    public void initControlDate(boolean isReGetMinMaxDate) {
+        if(isReGetMinMaxDate) {
+            minMaxDate = debtsModel.getMinMaxDate();
+            currentMonth = Integer.valueOf(minMaxDate.get("max_month").toString());
+            currentYear = Integer.valueOf(minMaxDate.get("max_year").toString());
+        }
         lbMonthYear.setText(Helper.monthsInYear[currentMonth-1] + ", "+ currentYear);
         
         if(currentMonth == Integer.parseInt(minMaxDate.get("min_month").toString()) && currentYear == Integer.parseInt(minMaxDate.get("min_year").toString())) {
@@ -556,7 +557,7 @@ public class Debts extends javax.swing.JPanel {
             btnViewAll.setText("Xem theo tháng");
             panelControlDate.setPreferredSize(new Dimension(487, 24));
         } else {
-            initControlDate();
+            initControlDate(true);
             lbMonthYear.setVisible(true);
             btnViewAll.setText("Xem tất cả");
         }
@@ -569,7 +570,7 @@ public class Debts extends javax.swing.JPanel {
         } else {
             currentMonth--;
         }
-        initControlDate();
+        initControlDate(false);
     }//GEN-LAST:event_btnPrevMonthMousePressed
 
     private void btnNextMonthMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNextMonthMousePressed
@@ -579,7 +580,7 @@ public class Debts extends javax.swing.JPanel {
         } else {
             currentMonth++;
         }
-        initControlDate();
+        initControlDate(false);
     }//GEN-LAST:event_btnNextMonthMousePressed
 
     private void btnSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMousePressed
@@ -622,13 +623,11 @@ public class Debts extends javax.swing.JPanel {
         
         boolean resuilt = debtsModel.insertNewDebt(debt);
         if(resuilt) {
-            //showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            initControlDate();
             titleFiled.setText("");
             noteField.setText("");
             amountField.setText("");
             addNewDialog.dispose();
-            initControlDate();
+            initControlDate(true);
             lbMonthYear.setVisible(true);
             btnViewAll.setText("Xem tất cả");
         } else {
@@ -693,7 +692,7 @@ public class Debts extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lbMonthYear;
+    public javax.swing.JLabel lbMonthYear;
     private javax.swing.JTextArea noteField;
     private javax.swing.JLabel paidAmount;
     private javax.swing.JPanel panelControlDate;
@@ -747,7 +746,11 @@ class DebtsTableModelListener implements TableModelListener {
         if(!resuilt) 
             showMessageDialog(table, "Có lỗi trong quá trình cập nhật, vui lòng kiểm tra lại dữ liệu nhập vào.", "Thông báo", JOptionPane.ERROR_MESSAGE);
         else
-            debtsPanel.initControlDate();
+            if(debtsPanel.lbMonthYear.isVisible()) {
+                debtsPanel.initControlDate(true);
+            } else {
+                debtsPanel.getAllDebts();
+            }
     }
   }
 }

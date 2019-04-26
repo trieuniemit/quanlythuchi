@@ -23,6 +23,7 @@ public class LoginModel {
                 (int) loginResuilt.get("id"),
                 loginResuilt.get("username").toString(), 
                 loginResuilt.get("password").toString(),
+                (int)loginResuilt.get("role"),
                 loginResuilt.get("created_at").toString()
             );
         else 
