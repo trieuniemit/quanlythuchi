@@ -8,7 +8,9 @@ package Model;
 import Library.DBManager;
 import Library.State;
 import entity.Spend;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 //import java.*;
 //import java.util.Calendar;
@@ -20,17 +22,6 @@ import java.util.HashMap;
 public class SpendModel {
     DBManager dBManager = new DBManager();
     
-//    public int getTotalSpend(){
-//        SpendModel spendsModel = new SpendModel();
-//        int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
-//        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-//        ArrayList<Spend> spendsData = spendsModel.getMonthYear(currentMonth, currentYear); 
-//        String totalSpend = "SELECT sum(amount) as TongTien FROM spends where user_id = "+State.currentUser.getId() + "and MONTH(datetime) ="+ currentMonth+" and YEAR(datetime) = "+currentYear ;
-//        
-//        HashMap<String, Object> dbdata = dBManager.getSingleRow(totalSpend);
-//        
-//        return (int)dbdata.get("TongTien") ;
-//    }
     public ArrayList<Spend> getAllSpends(){
         ArrayList<Spend> spends = new ArrayList<>();
         String sqlQuery = "SELECT * From Spends where user_id = "+State.currentUser.getId();
@@ -107,5 +98,30 @@ public class SpendModel {
             ));
         }
         return spends;
+    }
+    
+    public HashMap getMinMaxDate() {
+        HashMap minMaxDate = dBManager.getSingleRow("SELECT MIN(datetime) AS min_date, MAX(datetime) AS max_date FROM spends");
+        
+        String maxDate = "", minDate = "";
+        try {
+            maxDate = minMaxDate.get("max_date").toString();
+            minDate = minMaxDate.get("min_date").toString();
+        } catch(Exception e) {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date currentDate = new Date();
+            String strDate = sdfDate.format(currentDate);
+            maxDate =  minDate = strDate;
+        }
+        
+        HashMap returnData = new HashMap();
+        returnData.put("max_year", maxDate.substring(0,4));
+        returnData.put("max_month", maxDate.substring(5,7));
+        returnData.put("min_year", minDate.substring(0,4));
+        returnData.put("min_month", minDate.substring(5,7));
+        
+        System.out.println(returnData);
+        
+        return returnData;
     }
 }
