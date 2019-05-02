@@ -4,9 +4,6 @@
   <NonVisualComponents>
     <Container class="javax.swing.JDialog" name="dialogAddLoans">
       <Properties>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[356, 376]"/>
-        </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[356, 376]"/>
         </Property>

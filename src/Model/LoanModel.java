@@ -18,17 +18,7 @@ import java.util.HashMap;
 public class LoanModel {
     DBManager dBManager = new DBManager();
     
-//    public int getTotalSpend(){
-//        SpendModel spendsModel = new SpendModel();
-//        int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
-//        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-//        ArrayList<Spend> spendsData = spendsModel.getMonthYear(currentMonth, currentYear); 
-//        String totalSpend = "SELECT sum(amount) as TongTien FROM spends where user_id = "+State.currentUser.getId() + "and MONTH(datetime) ="+ currentMonth+" and YEAR(datetime) = "+currentYear ;
-//        
-//        HashMap<String, Object> dbdata = dBManager.getSingleRow(totalSpend);
-//        
-//        return (int)dbdata.get("TongTien") ;
-//    }
+
     public ArrayList<Loan> getAllLoans(){
         ArrayList<Loan> loans = new ArrayList<>();
         String sqlQuery = "SELECT * From loans where user_id = "+State.currentUser.getId();
@@ -65,7 +55,7 @@ public class LoanModel {
     
     public  boolean updateLoan(Loan loan){
         String sqlQuery = dBManager.securceSql(
-                "UPDATE loans SET title={$1}, note={$2}, amount={$3},recover_at = {s4},status = {$5} where id={$6}",
+                "UPDATE loans SET title={$1}, note={$2}, amount={$3},recover_at = {$4},status = {$5} where id={$6}",
                 new String[]{loan.getTitle(),loan.getNote(),loan.getAmount()+"",loan.getRecoverAt(),loan.getStatus()+"",loan.getId()+""}
         );
         return dBManager.setQuery(sqlQuery);
@@ -91,7 +81,5 @@ public class LoanModel {
         return loans;
     }
 
-    
-    
-    
+   
 }

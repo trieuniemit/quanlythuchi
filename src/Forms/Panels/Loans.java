@@ -4,8 +4,6 @@ import Entity.Loan;
 import Library.Helper;
 import Library.State;
 import Model.LoanModel;
-import Model.SpendModel;
-import entity.Spend;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +26,7 @@ public class Loans extends javax.swing.JPanel {
     LoanModel loanModel = new LoanModel();
     
     
-    ArrayList<Loan> loansData = loanModel.getAllLoans();
+    ArrayList<Loan> loansData;
     
     public Loans() {
         initComponents();
@@ -291,8 +289,7 @@ public class Loans extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void showData(){
-//        ArrayList<Loan> data 
+    private void fillData(){
         DefaultTableModel tableModel = (DefaultTableModel) tableLoans.getModel();
         tableModel.setRowCount(0);
         int indexID=1;
@@ -301,7 +298,13 @@ public class Loans extends javax.swing.JPanel {
             tableModel.addRow(rowValues);
             indexID++;
         }
-//        lbTotalSpend.setText( ""+Helper.currencyFormat(totalSpend));
+    }
+    
+    private void showData(){
+        loansData = loanModel.getAllLoans();
+        fillData();
+        
+      
     }
     
     private void btnAddLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLoansActionPerformed
@@ -309,7 +312,6 @@ public class Loans extends javax.swing.JPanel {
         dialogAddLoans.show();
         lbTitleDialogLoan.setText("Thêm phiếu cho vay");
         btnAddLoan.setText("Thêm");
-//        checkBoxStatusLoan.che
     }//GEN-LAST:event_btnAddLoansActionPerformed
 
     private void btnEditLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditLoansActionPerformed
@@ -321,8 +323,7 @@ public class Loans extends javax.swing.JPanel {
         tbTitleLoan.setText(loan.getTitle());
         tbAmountLoan.setText(loan.getAmount()+"");
         tbNoteLoan.setText(loan.getNote());
-        System.out.println(loan.getRecoverAt());
-//        jDateChooserRecover.setDateFormatString(loan.getRecoverAt());
+//        jDateChooserRecover.setDateFormatString("abcbcbc");
     }//GEN-LAST:event_btnEditLoansActionPerformed
 
     private void btnDeleteLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLoansActionPerformed
@@ -331,20 +332,19 @@ public class Loans extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(btnDeleteLoans, "Bạn có thực sự muốn xóa hay không ?","Cảnh báo !", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
         if(result == 0)
         {
-//            for(int i : selectedRows){
-//                loanModel.deleteLoan(loansData.get(i).getId());
-//            }
-            
-            System.out.println(loansData);
+            for(int i : selectedRows){
+                loanModel.deleteLoan(loansData.get(i).getId());
+            }
             showData();
         }
+        
     }//GEN-LAST:event_btnDeleteLoansActionPerformed
 
     private void btnFindLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindLoansActionPerformed
         // TODO add your handling code here:
         String tbFind = tbFindLoans.getText();
         loansData = loanModel.findLoans(tbFind);
-        showData();
+        fillData();
     }//GEN-LAST:event_btnFindLoansActionPerformed
 
     private void btnExitLoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitLoanActionPerformed
@@ -374,9 +374,10 @@ public class Loans extends javax.swing.JPanel {
         }
         Date date =  jDateChooserRecover.getDate();
         
+        
         String dateStr = null;
         try {
-            dateStr = "20"+(date.getYear() - 100)+"-"+date.getMonth()+"-"+date.getDate() + " 00:00:00";
+            dateStr = "20"+(date.getYear() - 100)+"-"+(date.getMonth()+1)+"-"+date.getDate() + " 00:00:00";
             } catch(Exception e) {
         }
         Loan loan = new Loan(
@@ -389,27 +390,40 @@ public class Loans extends javax.swing.JPanel {
         );
         
         if( btnAddLoan.getText() == "Thêm"){
-            loanModel.insertLoan(loan);
-            showData();
-            tbTitleLoan.setText("");
-            tbAmountLoan.setText("");
-            tbNoteLoan.setText("");
-    //        jDateChooserLoan.setDateFormatString("");
-            jDateChooserRecover.setDateFormatString("");
-            dialogAddLoans.dispose();
+            if( date.getYear()+2000-100 >= currentYear && date.getMonth()+1 >= currentMonth && date.getDate() >= currentDay){
+                        loanModel.insertLoan(loan);
+                        showData();
+                        tbTitleLoan.setText("");
+                        tbAmountLoan.setText("");
+                        tbNoteLoan.setText("");
+                //            jDateChooserLoan.setDateFormatString("");
+                        jDateChooserRecover.setDateFormatString("");
+                        dialogAddLoans.dispose();
+                    }
+            else{
+//                System.out.println(date.getYear() + (date.getMonth()+1) + date.getDate());
+                showMessageDialog(dialogAddLoans,"Ngày trả sai, mời bạn nhập lại !","Thông báo",JOptionPane.ERROR_MESSAGE);
+            }
         }
         else{
-            int loanId = loansData.get(tableLoans.getSelectedRow()).getId();
-            loan.setId(loanId);
-            
-            loanModel.updateLoan(loan);
-            showData();
-            dialogAddLoans.dispose();
+            if( date.getYear()+2000-100 >= currentYear && date.getMonth()+1 >= currentMonth && date.getDate() >= currentDay){
+                int loanId = loansData.get(tableLoans.getSelectedRow()).getId();
+                loan.setId(loanId);
+
+                loanModel.updateLoan(loan);
+                showData();
+                dialogAddLoans.dispose();
+                tbTitleLoan.setText("");
+                tbAmountLoan.setText("");
+                tbNoteLoan.setText("");
+                jDateChooserRecover.setDateFormatString("");
+            }
+            else{
+//                System.out.println(date.getYear() + (date.getMonth()+1) + date.getDate());
+                showMessageDialog(dialogAddLoans,"Ngày trả sai, mời bạn nhập lại !","Thông báo",JOptionPane.ERROR_MESSAGE);
+            }
         }
-        tbTitleLoan.setText("");
-        tbAmountLoan.setText("");
-        tbNoteLoan.setText("");
-        jDateChooserRecover.setDateFormatString("");
+        
     }//GEN-LAST:event_btnAddLoanActionPerformed
 
 
