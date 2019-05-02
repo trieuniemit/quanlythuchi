@@ -3,7 +3,6 @@ package Forms;
 import Entity.User;
 import Library.State;
 import Model.LoginModel;
-import java.util.HashMap;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
 
