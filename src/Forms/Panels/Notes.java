@@ -1,18 +1,45 @@
 package Forms.Panels;
 
+import Entity.Note;
+import Library.Helper;
+import Library.State;
+import Model.NotesModel;
+import entity.Spend;
+import java.io.Console;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.table.DefaultTableModel;
+
+
+
 /**
  *
  * @author Ho Sy Huy
  */
 public class Notes extends javax.swing.JPanel {
 
-    /**
-     * Creates new form InComes
-     */
+    NotesModel notesModel = new NotesModel();
+    ArrayList<Note> notesData= notesModel.getAllNotes() ;
+    
     public Notes() {
         initComponents();
+        fillDataToTable();
     }
 
+    private void fillDataToTable(){
+        
+        ArrayList<Note> data = notesModel.getAllNotes(); 
+        DefaultTableModel tableModel = (DefaultTableModel) tableNotes.getModel();
+        tableModel.setRowCount(0);
+        int indexID=1;
+//        System.out.println(1);
+        for(Note row : data){
+            Object[] rowValues = {indexID,row.getTitle(),row.getContent()};
+            tableModel.addRow(rowValues);
+            indexID++;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -22,28 +49,297 @@ public class Notes extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dialogAddNote = new javax.swing.JDialog();
+        btnAddNote = new javax.swing.JButton();
+        btn = new javax.swing.JButton();
+        btnCloseNote = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        textareaNote = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        lbTitleDialogNote = new javax.swing.JLabel();
+        tbTitleNote = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        btnAddNotes = new javax.swing.JButton();
+        btnEditNotes = new javax.swing.JButton();
+        btnDeleteNotes = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableNotes = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+
+        dialogAddNote.setMinimumSize(new java.awt.Dimension(443, 300));
+
+        btnAddNote.setText("jButton1");
+        btnAddNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNoteActionPerformed(evt);
+            }
+        });
+
+        btn.setText("Nhập lại");
+        btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionPerformed(evt);
+            }
+        });
+
+        btnCloseNote.setText("Thoát");
+        btnCloseNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseNoteActionPerformed(evt);
+            }
+        });
+
+        textareaNote.setColumns(20);
+        textareaNote.setRows(5);
+        jScrollPane2.setViewportView(textareaNote);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel4.setText("Ghi chú");
+
+        lbTitleDialogNote.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lbTitleDialogNote.setText("aaaaaaa");
+
+        tbTitleNote.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel3.setText("Tiêu đề");
+
+        javax.swing.GroupLayout dialogAddNoteLayout = new javax.swing.GroupLayout(dialogAddNote.getContentPane());
+        dialogAddNote.getContentPane().setLayout(dialogAddNoteLayout);
+        dialogAddNoteLayout.setHorizontalGroup(
+            dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                .addGroup(dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(tbTitleNote))
+                            .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                        .addGap(103, 103, 103)
+                        .addComponent(btnAddNote)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCloseNote))
+                    .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                        .addGap(165, 165, 165)
+                        .addComponent(lbTitleDialogNote)))
+                .addContainerGap(64, Short.MAX_VALUE))
+        );
+        dialogAddNoteLayout.setVerticalGroup(
+            dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogAddNoteLayout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(lbTitleDialogNote)
+                .addGap(18, 18, 18)
+                .addGroup(dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tbTitleNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(38, 38, 38)
+                .addGroup(dialogAddNoteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddNote)
+                    .addComponent(btn)
+                    .addComponent(btnCloseNote))
+                .addGap(28, 28, 28))
+        );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Ghi chú");
 
+        btnAddNotes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnAddNotes.setText("Thêm");
+        btnAddNotes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNotesActionPerformed(evt);
+            }
+        });
+
+        btnEditNotes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnEditNotes.setText("Sửa");
+        btnEditNotes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditNotesActionPerformed(evt);
+            }
+        });
+
+        btnDeleteNotes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnDeleteNotes.setText("Xóa");
+        btnDeleteNotes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteNotesActionPerformed(evt);
+            }
+        });
+
+        tableNotes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tableNotes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "STT", "Tiêu đề", "Ghi chú"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableNotes.setSurrendersFocusOnKeystroke(true);
+        jScrollPane1.setViewportView(tableNotes);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel2.setText("Danh sách ghi chú");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAddNotes)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEditNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnDeleteNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(0, 271, Short.MAX_VALUE))
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddNotes)
+                    .addComponent(btnEditNotes)
+                    .addComponent(btnDeleteNotes))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    private void btnAddNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNotesActionPerformed
+        // TODO add your handling code here:
+        dialogAddNote.show();
+        btnAddNote.setText("Thêm");
+        lbTitleDialogNote.setText("Thêm ghi chú");
+
+    }//GEN-LAST:event_btnAddNotesActionPerformed
+
+    private void btnEditNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditNotesActionPerformed
+        // TODO add your handling code here:
+        dialogAddNote.show();
+        btnAddNote.setText("Sửa");
+        lbTitleDialogNote.setText("Sửa ghi chú");
+        Note note = notesData.get(tableNotes.getSelectedRow());
+        System.out.println(tableNotes.getSelectedRow());
+        tbTitleNote.setText(note.getTitle());
+        textareaNote.setText(note.getContent());
+    }//GEN-LAST:event_btnEditNotesActionPerformed
+
+    private void btnDeleteNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteNotesActionPerformed
+        // TODO add your handling code here:
+        int[] selectedRows = tableNotes.getSelectedRows();
+        int result = JOptionPane.showConfirmDialog(btnDeleteNotes, "Bạn có thực sự muốn xóa hay không ?","Cảnh báo !", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+        if(result == 0)
+        {
+            for(int i : selectedRows){
+                notesModel.deleteNotes(notesData.get(i).getId());
+            }
+            fillDataToTable();
+        }
+        
+    }//GEN-LAST:event_btnDeleteNotesActionPerformed
+
+    private void btnCloseNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseNoteActionPerformed
+        // TODO add your handling code here:
+        dialogAddNote.dispose();
+    }//GEN-LAST:event_btnCloseNoteActionPerformed
+
+    private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
+        // TODO add your handling code here:
+        tbTitleNote.setText("");
+        textareaNote.setText("");
+    }//GEN-LAST:event_btnActionPerformed
+
+    private void btnAddNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNoteActionPerformed
+        // TODO add your handling code here:
+        if(tbTitleNote.getText().isEmpty() || textareaNote.getText().isEmpty()){
+            showMessageDialog(dialogAddNote,"Bạn chưa nhập tiêu đề hoặc ghi chú !","Thông báo",JOptionPane.ERROR_MESSAGE);
+        return;
+        }
+        Note note = new Note(
+                State.currentUser.getId(),
+                tbTitleNote.getText(),
+                textareaNote.getText()
+        );
+        
+        if( btnAddNote.getText() == "Thêm"){
+            notesModel.insertNotes(note);
+            fillDataToTable();
+            dialogAddNote.dispose();
+        }
+        else{
+            int noteId = notesData.get(tableNotes.getSelectedRow()).getId();
+            note.setId(noteId);
+            
+            notesModel.updateNotes(note);
+            fillDataToTable();
+            dialogAddNote.dispose();
+        }
+        tbTitleNote.setText("");
+        textareaNote.setText("");
+    }//GEN-LAST:event_btnAddNoteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn;
+    private javax.swing.JButton btnAddNote;
+    private javax.swing.JButton btnAddNotes;
+    private javax.swing.JButton btnCloseNote;
+    private javax.swing.JButton btnDeleteNotes;
+    private javax.swing.JButton btnEditNotes;
+    private javax.swing.JDialog dialogAddNote;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbTitleDialogNote;
+    private javax.swing.JTable tableNotes;
+    private javax.swing.JTextField tbTitleNote;
+    private javax.swing.JTextArea textareaNote;
     // End of variables declaration//GEN-END:variables
 }

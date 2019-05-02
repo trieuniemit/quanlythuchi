@@ -1,5 +1,17 @@
 package Forms.Panels;
 
+import Entity.Loan;
+import Library.Helper;
+import Library.State;
+import Model.LoanModel;
+import Model.SpendModel;
+import entity.Spend;
+import java.util.ArrayList;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Trieu Tai Niem
@@ -9,8 +21,16 @@ public class Loans extends javax.swing.JPanel {
     /**
      * Creates new form InComes
      */
+    int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    LoanModel loanModel = new LoanModel();
+    
+    
+    ArrayList<Loan> loansData;
+    
     public Loans() {
         initComponents();
+        showData();
     }
 
     /**
@@ -22,28 +42,390 @@ public class Loans extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dialogAddLoans = new javax.swing.JDialog();
+        lbTitleDialogLoan = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        tbTitleLoan = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        tbAmountLoan = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        tbNoteLoan = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        checkBoxStatusLoan = new javax.swing.JCheckBox();
+        btnAddLoan = new javax.swing.JButton();
+        btnReType = new javax.swing.JButton();
+        btnExitLoan = new javax.swing.JButton();
+        jDateChooserRecover = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnAddLoans = new javax.swing.JButton();
+        btnEditLoans = new javax.swing.JButton();
+        btnDeleteLoans = new javax.swing.JButton();
+        btnFindLoans = new javax.swing.JButton();
+        tbFindLoans = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableLoans = new javax.swing.JTable();
+
+        dialogAddLoans.setMinimumSize(new java.awt.Dimension(372, 281));
+
+        lbTitleDialogLoan.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbTitleDialogLoan.setText("jLabel3");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel3.setText("Người vay");
+
+        tbTitleLoan.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel4.setText("Số tiền");
+
+        tbAmountLoan.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel6.setText("Ghi chú");
+
+        tbNoteLoan.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel7.setText("Ngày trả");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel8.setText("Tình trạng");
+
+        checkBoxStatusLoan.setText("Vay");
+
+        btnAddLoan.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnAddLoan.setText("jButton1");
+        btnAddLoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddLoanActionPerformed(evt);
+            }
+        });
+
+        btnReType.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnReType.setText("Nhập lại");
+        btnReType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReTypeActionPerformed(evt);
+            }
+        });
+
+        btnExitLoan.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnExitLoan.setText("Thoát");
+        btnExitLoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitLoanActionPerformed(evt);
+            }
+        });
+
+        jDateChooserRecover.setDateFormatString("dd / MM / YYYY");
+
+        javax.swing.GroupLayout dialogAddLoansLayout = new javax.swing.GroupLayout(dialogAddLoans.getContentPane());
+        dialogAddLoans.getContentPane().setLayout(dialogAddLoansLayout);
+        dialogAddLoansLayout.setHorizontalGroup(
+            dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tbTitleLoan, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tbNoteLoan, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tbAmountLoan, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(jDateChooserRecover, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(checkBoxStatusLoan))))
+                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                        .addGap(140, 140, 140)
+                        .addComponent(lbTitleDialogLoan))
+                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(btnAddLoan)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReType)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExitLoan)))
+                .addContainerGap(38, Short.MAX_VALUE))
+        );
+        dialogAddLoansLayout.setVerticalGroup(
+            dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbTitleDialogLoan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4))
+                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                        .addComponent(tbTitleLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tbNoteLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tbAmountLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jDateChooserRecover, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(checkBoxStatusLoan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddLoan)
+                    .addComponent(btnReType)
+                    .addComponent(btnExitLoan))
+                .addContainerGap())
+        );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Quản lý cho vay");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel2.setText("Danh sách các con nợ :))");
+
+        btnAddLoans.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnAddLoans.setText("Thêm");
+        btnAddLoans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddLoansActionPerformed(evt);
+            }
+        });
+
+        btnEditLoans.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnEditLoans.setText("Sửa");
+        btnEditLoans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditLoansActionPerformed(evt);
+            }
+        });
+
+        btnDeleteLoans.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnDeleteLoans.setText("Xóa");
+        btnDeleteLoans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteLoansActionPerformed(evt);
+            }
+        });
+
+        btnFindLoans.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnFindLoans.setText("Tìm kiếm");
+        btnFindLoans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindLoansActionPerformed(evt);
+            }
+        });
+
+        tbFindLoans.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+
+        tableLoans.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tableLoans.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "STT", "Người vay", "Ghi chú", "Số tiền", "Thời gian vay", "Thời gian trả", "Tình trạng"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableLoans.setToolTipText("");
+        jScrollPane1.setViewportView(tableLoans);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 972, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAddLoans)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditLoans)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDeleteLoans)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tbFindLoans, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnFindLoans))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(0, 271, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddLoans)
+                    .addComponent(btnEditLoans)
+                    .addComponent(btnDeleteLoans)
+                    .addComponent(btnFindLoans)
+                    .addComponent(tbFindLoans, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void showData(){
+        ArrayList<Loan> data = loanModel.getAllLoans();
+        DefaultTableModel tableModel = (DefaultTableModel) tableLoans.getModel();
+        tableModel.setRowCount(0);
+        int indexID=1;
+        for(Loan row : data){
+            Object[] rowValues = {indexID,row.getTitle(),row.getNote(),Helper.currencyFormat(row.getAmount()),row.getLoanAt(),row.getRecoverAt(),row.getStatus()};
+            tableModel.addRow(rowValues);
+            indexID++;
+        }
+//        lbTotalSpend.setText( ""+Helper.currencyFormat(totalSpend));
+    }
+    
+    private void btnAddLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLoansActionPerformed
+        // TODO add your handling code here:
+        dialogAddLoans.show();
+        lbTitleDialogLoan.setText("Thêm phiếu cho vay");
+        btnAddLoan.setText("Thêm");
+//        checkBoxStatusLoan.che
+    }//GEN-LAST:event_btnAddLoansActionPerformed
+
+    private void btnEditLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditLoansActionPerformed
+        // TODO add your handling code here:
+        dialogAddLoans.show();
+        lbTitleDialogLoan.setText("Sửa phiếu cho vay");
+        btnAddLoan.setText("Sửa");
+    }//GEN-LAST:event_btnEditLoansActionPerformed
+
+    private void btnDeleteLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLoansActionPerformed
+        // TODO add your handling code here:
+        int[] selectedRows = tableLoans.getSelectedRows();
+        int result = JOptionPane.showConfirmDialog(btnDeleteLoans, "Bạn có thực sự muốn xóa hay không ?","Cảnh báo !", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+        if(result == 0)
+        {
+//            for(int i : selectedRows){
+//                loanModel.deleteLoan(loansData.get(i).getId());
+//            }
+            
+            System.out.println(loansData);
+            showData();
+        }
+    }//GEN-LAST:event_btnDeleteLoansActionPerformed
+
+    private void btnFindLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindLoansActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFindLoansActionPerformed
+
+    private void btnExitLoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitLoanActionPerformed
+        // TODO add your handling code here:
+        tbTitleLoan.setText("");
+        tbAmountLoan.setText("");
+        tbNoteLoan.setText("");
+//        jDateChooserLoan.setDateFormatString("");
+        jDateChooserRecover.setDateFormatString("");
+        dialogAddLoans.dispose();
+    }//GEN-LAST:event_btnExitLoanActionPerformed
+
+    private void btnReTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReTypeActionPerformed
+        // TODO add your handling code here:
+        tbTitleLoan.setText("");
+        tbAmountLoan.setText("");
+        tbNoteLoan.setText("");
+//        jDateChooserLoan.setDateFormatString("");
+        jDateChooserRecover.setDateFormatString("");
+    }//GEN-LAST:event_btnReTypeActionPerformed
+
+    private void btnAddLoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLoanActionPerformed
+        // TODO add your handling code here:
+        if(tbTitleLoan.getText().isEmpty() || tbAmountLoan.getText().isEmpty() || jDateChooserRecover.getDateFormatString().isEmpty()){
+            showMessageDialog(dialogAddLoans,"Bạn chưa nhập tên người vay , số tiền, hoặc ngày trả !","Thông báo",JOptionPane.ERROR_MESSAGE);
+        return;
+        }
+        Loan loan = new Loan(
+                State.currentUser.getId(),
+                Integer.valueOf(tbAmountLoan.getText()),
+                tbTitleLoan.getText(),
+                tbNoteLoan.getText()
+        );
+        
+        if( btnAddLoan.getText() == "Thêm"){
+            loanModel.insertLoan(loan);
+            showData();
+            dialogAddLoans.dispose();
+        }
+        else{
+            int loanId = loansData.get(tableLoans.getSelectedRow()).getId();
+            loan.setId(loanId);
+            
+            loanModel.updateLoan(loan);
+            showData();
+            dialogAddLoans.dispose();
+        }
+        tbTitleLoan.setText("");
+        tbAmountLoan.setText("");
+        tbNoteLoan.setText("");
+        jDateChooserRecover.setDateFormatString("");
+    }//GEN-LAST:event_btnAddLoanActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddLoan;
+    private javax.swing.JButton btnAddLoans;
+    private javax.swing.JButton btnDeleteLoans;
+    private javax.swing.JButton btnEditLoans;
+    private javax.swing.JButton btnExitLoan;
+    private javax.swing.JButton btnFindLoans;
+    private javax.swing.JButton btnReType;
+    private javax.swing.JCheckBox checkBoxStatusLoan;
+    private javax.swing.JDialog dialogAddLoans;
+    private com.toedter.calendar.JDateChooser jDateChooserRecover;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbTitleDialogLoan;
+    private javax.swing.JTable tableLoans;
+    private javax.swing.JTextField tbAmountLoan;
+    private javax.swing.JTextField tbFindLoans;
+    private javax.swing.JTextField tbNoteLoan;
+    private javax.swing.JTextField tbTitleLoan;
     // End of variables declaration//GEN-END:variables
 }

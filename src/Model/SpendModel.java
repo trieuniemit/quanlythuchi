@@ -10,7 +10,8 @@ import Library.State;
 import entity.Spend;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.*;
+//import java.*;
+//import java.util.Calendar;
 
 /**
  *
@@ -19,6 +20,17 @@ import java.*;
 public class SpendModel {
     DBManager dBManager = new DBManager();
     
+//    public int getTotalSpend(){
+//        SpendModel spendsModel = new SpendModel();
+//        int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
+//        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+//        ArrayList<Spend> spendsData = spendsModel.getMonthYear(currentMonth, currentYear); 
+//        String totalSpend = "SELECT sum(amount) as TongTien FROM spends where user_id = "+State.currentUser.getId() + "and MONTH(datetime) ="+ currentMonth+" and YEAR(datetime) = "+currentYear ;
+//        
+//        HashMap<String, Object> dbdata = dBManager.getSingleRow(totalSpend);
+//        
+//        return (int)dbdata.get("TongTien") ;
+//    }
     public ArrayList<Spend> getAllSpends(){
         ArrayList<Spend> spends = new ArrayList<>();
         String sqlQuery = "SELECT * From Spends where user_id = "+State.currentUser.getId();
