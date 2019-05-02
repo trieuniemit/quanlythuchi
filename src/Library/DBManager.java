@@ -35,6 +35,7 @@ public class DBManager {
         } catch (SQLException | ClassNotFoundException ex) {
             System.err.println("ERROR: Can't connect to database! :))");
             showMessageDialog(null, "Không thể kết nối đến cơ sở dữ liệu!", "Thông báo!", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         }
     }
     
@@ -108,6 +109,6 @@ public class DBManager {
     public String securceSql(String sqlQuery, String value) {
         String replaceChars = value.replaceAll("[,'`\"\";<>=]", "");
         sqlQuery = sqlQuery.replace("{$}", "'" + replaceChars + "'");
-        return sqlQuery;
+        return sqlQuery;       
     }
 }

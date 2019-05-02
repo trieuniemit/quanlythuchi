@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0.1
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2019 at 03:48 PM
--- Server version: 10.1.32-MariaDB
--- PHP Version: 7.1.17
+-- Generation Time: May 02, 2019 at 12:53 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `quanlytaichinh`
 --
-CREATE DATABASE IF NOT EXISTS `quanlytaichinh` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `quanlytaichinh`;
 
 -- --------------------------------------------------------
 
@@ -36,10 +34,18 @@ CREATE TABLE `debts` (
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `note` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `amount` int(11) NOT NULL,
-  `debt_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `debt_term` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` bit(1) NOT NULL DEFAULT b'0'
+  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `debts`
+--
+
+INSERT INTO `debts` (`id`, `user_id`, `title`, `note`, `amount`, `datetime`, `status`) VALUES
+(7, 1, 'Nợ Khanh', '', 290000, '2019-03-09 00:00:00', 0),
+(8, 1, 'Nợ Hùng', '', 500000, '2019-07-16 00:00:00', 0),
+(10, 1, 'Vay Trường', '', 200008, '2019-04-15 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -53,9 +59,15 @@ CREATE TABLE `incomes` (
   `title` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `note` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `amount` int(11) NOT NULL,
-  `auto_income` bit(1) NOT NULL DEFAULT b'0',
   `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `incomes`
+--
+
+INSERT INTO `incomes` (`id`, `user_id`, `title`, `note`, `amount`, `datetime`) VALUES
+(4, 1, 'Lương tháng 6', '', 11200000, '2019-05-25 11:35:36');
 
 -- --------------------------------------------------------
 
@@ -99,7 +111,7 @@ CREATE TABLE `spends` (
   `title` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `note` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `amount` int(11) NOT NULL,
-  `auto_spend` bit(1) NOT NULL DEFAULT b'0',
+  `status` int(1) NOT NULL DEFAULT '0',
   `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -113,6 +125,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `role` int(1) NOT NULL DEFAULT '1',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -120,8 +133,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `created_at`) VALUES
-(1, 'trieuniemit', '123456', '2019-04-05 19:57:51');
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`) VALUES
+(1, 'trieuniemit', 'e10adc3949ba59abbe56e057f20f883e', 1, '2019-04-05 19:57:51'),
+(3, 'huyhy', 'e10adc3949ba59abbe56e057f20f883e', 0, '2019-05-02 13:23:49');
 
 --
 -- Indexes for dumped tables
@@ -132,15 +146,14 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`) VALUES
 --
 ALTER TABLE `debts`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`),
-  ADD UNIQUE KEY `user_id_2` (`user_id`);
+  ADD KEY `user_id` (`user_id`) USING BTREE;
 
 --
 -- Indexes for table `incomes`
 --
 ALTER TABLE `incomes`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`) USING BTREE;
 
 --
 -- Indexes for table `loans`
@@ -177,13 +190,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `debts`
 --
 ALTER TABLE `debts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `incomes`
 --
 ALTER TABLE `incomes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `loans`
@@ -207,7 +220,7 @@ ALTER TABLE `spends`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
