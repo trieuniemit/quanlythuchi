@@ -17,7 +17,9 @@ public class Loan {
     private int amount;
     private String loanAt;
     private String recoverAt;
-    private boolean status;
+    private int status;
+
+    
 
     public int getId() {
         return id;
@@ -47,7 +49,7 @@ public class Loan {
         return recoverAt;
     }
 
-    public boolean getStatus() {
+    public int getStatus() {
         return status;
     }
 
@@ -79,7 +81,7 @@ public class Loan {
         this.recoverAt = recoverAt;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -87,7 +89,7 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(int id, int user_id, String title, String note, int amount, String loanAt, String recoverAt, boolean status) {
+    public Loan(int id, int user_id, String title, String note, int amount, String loanAt, String recoverAt, int status) {
         this.id = id;
         this.user_id = user_id;
         this.title = title;
@@ -98,7 +100,16 @@ public class Loan {
         this.status = status;
     }
 
-    public Loan(int id, String title, String note, int amount, String loanAt, String recoverAt, boolean status) {
+    public Loan(int id, String title, String note, int amount, String recoverAt, int status) {
+        this.id = id;
+        this.title = title;
+        this.note = note;
+        this.amount = amount;
+        this.recoverAt = recoverAt;
+        this.status = status;
+    }
+
+    public Loan(int id, String title, String note, int amount, String loanAt, String recoverAt, int status) {
         this.id = id;
         this.title = title;
         this.note = note;

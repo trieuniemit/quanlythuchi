@@ -49,11 +49,11 @@ public class Spends extends javax.swing.JPanel {
     
     private void showData(){
         int totalSpend=0;
-        ArrayList<Spend> data = spendsModel.getAllSpends();
+        ArrayList<Spend> spendsData=  spendsModel.getAllSpends();
         DefaultTableModel tableModel = (DefaultTableModel) tableSpends.getModel();
         tableModel.setRowCount(0);
         int indexID=1;
-        for(Spend row : data){
+        for(Spend row : spendsData){
             Object[] rowValues = {indexID,row.getTitle(),row.getNote(),Helper.currencyFormat(row.getAmount()),row.getDatetime()};
             tableModel.addRow(rowValues);
             indexID++;
@@ -397,6 +397,7 @@ public class Spends extends javax.swing.JPanel {
 
     private void btnEditSpendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSpendActionPerformed
         // TODO add your handling code here:
+        
         dialogAdd.show();
         btnAdd.setText("Sửa");
         lbTittle.setText("Sửa chi tiêu");
@@ -404,6 +405,7 @@ public class Spends extends javax.swing.JPanel {
         txtTittle.setText(spend.getTitle());
         txtAmount.setText(spend.getAmount()+"");
         txtareaNotes.setText(spend.getNote());
+        
     }//GEN-LAST:event_btnEditSpendActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed

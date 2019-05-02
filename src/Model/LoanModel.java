@@ -42,7 +42,7 @@ public class LoanModel {
                 (int)row.get("amount"),
                 row.get("loan_at").toString(),
                 row.get("recover_at").toString(), 
-                (boolean)row.get("status")
+                (int)row.get("status")
             ));
         }
         return loans;
@@ -52,8 +52,8 @@ public class LoanModel {
     public boolean insertLoan(Loan loan){
         
         String sqlQuery = dBManager.securceSql(
-                "INSERT INTO Loans (user_id,title,note,amount,loan_at,recover_at,status) VALUES({$1},{$2},{$3},{$4},{$5},{$6},{$7})",
-                new String[]{State.currentUser.getId()+"",loan.getTitle(),loan.getNote(),loan.getAmount()+"",loan.getLoanAt(),loan.getRecoverAt(),loan.getStatus()+""}
+                "INSERT INTO Loans (user_id,title,note,amount,recover_at,status) VALUES({$1},{$2},{$3},{$4},{$5},{$6})",
+                new String[]{State.currentUser.getId()+"",loan.getTitle(),loan.getNote(),loan.getAmount()+"",loan.getRecoverAt(),loan.getStatus()+""}
         );
         return dBManager.setQuery(sqlQuery);
     }
@@ -65,13 +65,13 @@ public class LoanModel {
     
     public  boolean updateLoan(Loan loan){
         String sqlQuery = dBManager.securceSql(
-                "UPDATE loans SET title={$1}, note={$2}, amount={$3},loan_at = {s4},recover_at = {s5},status = {$6} where id={$7}",
-                new String[]{loan.getTitle(),loan.getNote(),loan.getAmount()+"",loan.getLoanAt(),loan.getRecoverAt(),loan.getStatus()+"",loan.getId()+""}
+                "UPDATE loans SET title={$1}, note={$2}, amount={$3},recover_at = {s4},status = {$5} where id={$6}",
+                new String[]{loan.getTitle(),loan.getNote(),loan.getAmount()+"",loan.getRecoverAt(),loan.getStatus()+"",loan.getId()+""}
         );
         return dBManager.setQuery(sqlQuery);
     }
     
-    public ArrayList<Loan> findSpends(String tbFindLoans){
+    public ArrayList<Loan> findLoans(String tbFindLoans){
         ArrayList<Loan> loans = new ArrayList<>();
         String sqlQuery = dBManager.securceSql("SELECT * From loans where title like {$}", "%"+tbFindLoans+"%");
         
@@ -85,7 +85,7 @@ public class LoanModel {
                 (int)row.get("amount"),
                 row.get("loan_at").toString(),
                 row.get("recover_at").toString(),
-                (boolean)row.get("status")
+                (int)row.get("status")
             ));
         }
         return loans;

@@ -8,6 +8,7 @@ import Model.SpendModel;
 import entity.Spend;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.table.DefaultTableModel;
@@ -21,12 +22,13 @@ public class Loans extends javax.swing.JPanel {
     /**
      * Creates new form InComes
      */
+    int currentDay = Calendar.getInstance().get(Calendar.DATE);
     int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     LoanModel loanModel = new LoanModel();
     
     
-    ArrayList<Loan> loansData;
+    ArrayList<Loan> loansData = loanModel.getAllLoans();
     
     public Loans() {
         initComponents();
@@ -51,8 +53,6 @@ public class Loans extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         tbNoteLoan = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        checkBoxStatusLoan = new javax.swing.JCheckBox();
         btnAddLoan = new javax.swing.JButton();
         btnReType = new javax.swing.JButton();
         btnExitLoan = new javax.swing.JButton();
@@ -67,7 +67,8 @@ public class Loans extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLoans = new javax.swing.JTable();
 
-        dialogAddLoans.setMinimumSize(new java.awt.Dimension(372, 281));
+        dialogAddLoans.setMaximumSize(new java.awt.Dimension(356, 376));
+        dialogAddLoans.setMinimumSize(new java.awt.Dimension(356, 376));
 
         lbTitleDialogLoan.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbTitleDialogLoan.setText("jLabel3");
@@ -89,11 +90,6 @@ public class Loans extends javax.swing.JPanel {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jLabel7.setText("Ngày trả");
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jLabel8.setText("Tình trạng");
-
-        checkBoxStatusLoan.setText("Vay");
 
         btnAddLoan.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         btnAddLoan.setText("jButton1");
@@ -119,7 +115,8 @@ public class Loans extends javax.swing.JPanel {
             }
         });
 
-        jDateChooserRecover.setDateFormatString("dd / MM / YYYY");
+        jDateChooserRecover.setDateFormatString("yyyy MM dd ");
+        jDateChooserRecover.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
 
         javax.swing.GroupLayout dialogAddLoansLayout = new javax.swing.GroupLayout(dialogAddLoans.getContentPane());
         dialogAddLoans.getContentPane().setLayout(dialogAddLoansLayout);
@@ -127,6 +124,9 @@ public class Loans extends javax.swing.JPanel {
             dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogAddLoansLayout.createSequentialGroup()
                 .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(lbTitleDialogLoan))
                     .addGroup(dialogAddLoansLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,57 +142,45 @@ public class Loans extends javax.swing.JPanel {
                                     .addComponent(tbAmountLoan, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(dialogAddLoansLayout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addGap(18, 18, 18)
-                                .addComponent(jDateChooserRecover, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(dialogAddLoansLayout.createSequentialGroup()
-                                .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(checkBoxStatusLoan))))
-                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
-                        .addGap(140, 140, 140)
-                        .addComponent(lbTitleDialogLoan))
-                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(btnAddLoan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnReType)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExitLoan)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                                .addComponent(jDateChooserRecover, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(22, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dialogAddLoansLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAddLoan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnReType)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExitLoan)
+                .addGap(51, 51, 51))
         );
         dialogAddLoansLayout.setVerticalGroup(
             dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogAddLoansLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lbTitleDialogLoan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4))
-                    .addGroup(dialogAddLoansLayout.createSequentialGroup()
-                        .addComponent(tbTitleLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tbNoteLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tbAmountLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10)
-                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jDateChooserRecover, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(checkBoxStatusLoan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                    .addComponent(tbTitleLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tbNoteLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tbAmountLoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(10, 10, 10)
+                .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jDateChooserRecover, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
                 .addGroup(dialogAddLoansLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddLoan)
                     .addComponent(btnReType)
                     .addComponent(btnExitLoan))
-                .addContainerGap())
+                .addGap(46, 46, 46))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -304,11 +292,11 @@ public class Loans extends javax.swing.JPanel {
 
     
     private void showData(){
-        ArrayList<Loan> data = loanModel.getAllLoans();
+//        ArrayList<Loan> data 
         DefaultTableModel tableModel = (DefaultTableModel) tableLoans.getModel();
         tableModel.setRowCount(0);
         int indexID=1;
-        for(Loan row : data){
+        for(Loan row : loansData){
             Object[] rowValues = {indexID,row.getTitle(),row.getNote(),Helper.currencyFormat(row.getAmount()),row.getLoanAt(),row.getRecoverAt(),row.getStatus()};
             tableModel.addRow(rowValues);
             indexID++;
@@ -329,6 +317,12 @@ public class Loans extends javax.swing.JPanel {
         dialogAddLoans.show();
         lbTitleDialogLoan.setText("Sửa phiếu cho vay");
         btnAddLoan.setText("Sửa");
+        Loan loan = loansData.get(tableLoans.getSelectedRow());
+        tbTitleLoan.setText(loan.getTitle());
+        tbAmountLoan.setText(loan.getAmount()+"");
+        tbNoteLoan.setText(loan.getNote());
+        System.out.println(loan.getRecoverAt());
+//        jDateChooserRecover.setDateFormatString(loan.getRecoverAt());
     }//GEN-LAST:event_btnEditLoansActionPerformed
 
     private void btnDeleteLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLoansActionPerformed
@@ -348,6 +342,9 @@ public class Loans extends javax.swing.JPanel {
 
     private void btnFindLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindLoansActionPerformed
         // TODO add your handling code here:
+        String tbFind = tbFindLoans.getText();
+        loansData = loanModel.findLoans(tbFind);
+        showData();
     }//GEN-LAST:event_btnFindLoansActionPerformed
 
     private void btnExitLoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitLoanActionPerformed
@@ -375,16 +372,30 @@ public class Loans extends javax.swing.JPanel {
             showMessageDialog(dialogAddLoans,"Bạn chưa nhập tên người vay , số tiền, hoặc ngày trả !","Thông báo",JOptionPane.ERROR_MESSAGE);
         return;
         }
+        Date date =  jDateChooserRecover.getDate();
+        
+        String dateStr = null;
+        try {
+            dateStr = "20"+(date.getYear() - 100)+"-"+date.getMonth()+"-"+date.getDate() + " 00:00:00";
+            } catch(Exception e) {
+        }
         Loan loan = new Loan(
                 State.currentUser.getId(),
-                Integer.valueOf(tbAmountLoan.getText()),
                 tbTitleLoan.getText(),
-                tbNoteLoan.getText()
+                tbNoteLoan.getText(),
+                Integer.valueOf(tbAmountLoan.getText()),
+                dateStr,
+                0
         );
         
         if( btnAddLoan.getText() == "Thêm"){
             loanModel.insertLoan(loan);
             showData();
+            tbTitleLoan.setText("");
+            tbAmountLoan.setText("");
+            tbNoteLoan.setText("");
+    //        jDateChooserLoan.setDateFormatString("");
+            jDateChooserRecover.setDateFormatString("");
             dialogAddLoans.dispose();
         }
         else{
@@ -410,7 +421,6 @@ public class Loans extends javax.swing.JPanel {
     private javax.swing.JButton btnExitLoan;
     private javax.swing.JButton btnFindLoans;
     private javax.swing.JButton btnReType;
-    private javax.swing.JCheckBox checkBoxStatusLoan;
     private javax.swing.JDialog dialogAddLoans;
     private com.toedter.calendar.JDateChooser jDateChooserRecover;
     private javax.swing.JLabel jLabel1;
@@ -419,7 +429,6 @@ public class Loans extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTitleDialogLoan;
     private javax.swing.JTable tableLoans;
