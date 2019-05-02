@@ -1,17 +1,13 @@
 package Forms.Panels;
 
-import Entity.Debt;
+import Entity.User;
 import Library.Helper;
 //import Library.WordWrapCellRenderer;
-import Library.State;
-import Model.DebtsModel;
-import Model.MainFormModel;
+import Model.UsersModel;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -23,34 +19,41 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Ho Sy Huy
+ * @author Trieu Tai Niem
  */
 public class Users extends javax.swing.JPanel {
-    DebtsModel debtsModel = new DebtsModel();
-    HashMap minMaxDate;
-    MainFormModel mainFormModel = new MainFormModel();
+    UsersModel usersModel = new UsersModel();
     
-    public static ArrayList<Debt> debtsShowInTable;
+    public static ArrayList<User> usersShowInTable;
             
-    int currentMonth = 0;
-    int currentYear = 0;
-    
-    /**
-     * Creates new form InComes
-     */
     public Users() {
         initComponents();
-        searchField.addFocusListener(new FocusListener() {
+        passwordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (searchField.getText().equals("Nhập từ khóa...")) {
-                    searchField.setText("");
+                if (passwordField.getText().equals("Mật khẩu...")) {
+                    passwordField.setText("");
                 }
             }
             @Override
             public void focusLost(FocusEvent e) {
-                if (searchField.getText().isEmpty()) {
-                    searchField.setText("Nhập từ khóa...");
+                if (passwordField.getText().isEmpty()) {
+                    passwordField.setText("Mật khẩu...");
+                }
+            }
+        });
+        
+        usernameField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (usernameField.getText().equals("Tên tài khoản...")) {
+                    usernameField.setText("");
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameField.getText().isEmpty()) {
+                    usernameField.setText("Tên tài khoản...");
                 }
             }
         });
@@ -58,57 +61,46 @@ public class Users extends javax.swing.JPanel {
         initTableStyles();
        
         //view all
-        getAllDebts();
+        getAllUsers();
         
         //set visible for delete button
         btnDelete.setVisible(false);
         //add event for edit table
-        debtsTable.getModel().addTableModelListener(new UsersTableModelListener(debtsTable, this));
+        usersTable.getModel().addTableModelListener(new UsersTableModelListener(usersTable, this));
     }
     
     private  void initTableStyles() {
-        debtsTable.getTableHeader().setPreferredSize(new Dimension(100, 30));
-        debtsTable.getColumnModel().getColumn(0).setMaxWidth(50);
-        debtsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
-        debtsTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-        debtsTable.getColumnModel().getColumn(3).setPreferredWidth(180);
-        debtsTable.getColumnModel().getColumn(5).setPreferredWidth(150);
+        usersTable.getTableHeader().setPreferredSize(new Dimension(100, 30));
+        usersTable.getColumnModel().getColumn(0).setMaxWidth(50);
+        usersTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+        usersTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+        usersTable.getColumnModel().getColumn(3).setPreferredWidth(70);
         
         //set align for column of table
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        debtsTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        usersTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        debtsTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+        usersTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
     }
     
-    public void getAllDebts() {
-        debtsShowInTable = debtsModel.getAllDebts();
-        showDebtsToTable(debtsShowInTable);
+    public void getAllUsers() {
+        usersShowInTable = usersModel.getAllUsers();
+        showDebtsToTable(usersShowInTable);
     }
     
-    private void showDebtsToTable(ArrayList<Debt> data) {
-        DefaultTableModel tableModel = (DefaultTableModel) debtsTable.getModel();
+    private void showDebtsToTable(ArrayList<User> data) {
+        DefaultTableModel tableModel = (DefaultTableModel) usersTable.getModel();
         tableModel.setRowCount(0);
         int rowIndex = 0;
-        int totalCount = 0, unpaidCount = 0, paidCount = 0;
-        for(Debt row: data) {
-            totalCount += row.getAmount();
-            if(row.getStatus() == 1) {
-                paidCount += row.getAmount();
-            } else {
-                unpaidCount += row.getAmount();
-            }
-            
-            System.out.println(totalCount);
+        for(User row: data) {
             tableModel.addRow(new Object[] {
                 ++rowIndex, 
-                row.getTitle(), 
-                Helper.currencyFormat(row.getAmount()), 
-                row.getNote(), 
-                (row.getStatus()==1), 
-                row.getDatetime()
+                row.getUsername(),
+                "**********", 
+                (row.getRole()==1),
+                row.getCreatedAt()
             });
         }
     }
@@ -122,153 +114,33 @@ public class Users extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        addNewDialog = new javax.swing.JDialog();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        titleFiled = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        amountField = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        noteField = new javax.swing.JTextArea();
-        btnReset = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        dateField = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        debtsTable = new javax.swing.JTable();
+        usersTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        searchField = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
+        passwordField = new javax.swing.JTextField();
+        btnAddNewUser = new javax.swing.JButton();
         btnDelete = new javax.swing.JLabel();
-        searchField1 = new javax.swing.JTextField();
-
-        addNewDialog.setTitle("Thêm thu nhập mới");
-        addNewDialog.setAlwaysOnTop(true);
-        addNewDialog.setMinimumSize(new java.awt.Dimension(390, 357));
-        addNewDialog.setResizable(false);
-        addNewDialog.setType(java.awt.Window.Type.POPUP);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Thêm khoản vay");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Tiêu đề");
-
-        titleFiled.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("Ghi chú");
-
-        amountField.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("Số tiền");
-
-        noteField.setColumns(20);
-        noteField.setRows(5);
-        jScrollPane2.setViewportView(noteField);
-
-        btnReset.setBackground(new java.awt.Color(0, 102, 102));
-        btnReset.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnReset.setForeground(new java.awt.Color(255, 255, 255));
-        btnReset.setText("Nhập lại");
-        btnReset.setFocusable(false);
-        btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnResetMousePressed(evt);
-            }
-        });
-
-        btnSave.setBackground(new java.awt.Color(0, 102, 102));
-        btnSave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("Lưu lại");
-        btnSave.setFocusable(false);
-        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnSaveMousePressed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Ngày tháng");
-
-        javax.swing.GroupLayout addNewDialogLayout = new javax.swing.GroupLayout(addNewDialog.getContentPane());
-        addNewDialog.getContentPane().setLayout(addNewDialogLayout);
-        addNewDialogLayout.setHorizontalGroup(
-            addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(addNewDialogLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(addNewDialogLayout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(btnReset)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSave)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(addNewDialogLayout.createSequentialGroup()
-                        .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
-                        .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(amountField)
-                            .addComponent(dateField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                            .addComponent(titleFiled))
-                        .addGap(20, 20, 20))))
-        );
-        addNewDialogLayout.setVerticalGroup(
-            addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addNewDialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addGap(12, 12, 12)
-                .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(titleFiled, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(11, 11, 11)
-                .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(amountField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(dateField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(addNewDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
-        );
+        usernameField = new javax.swing.JTextField();
+        cbbRole = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Quản lý người dùng");
 
-        debtsTable.setModel(new javax.swing.table.DefaultTableModel(
+        usersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "STT", "Tiêu đề", "Số tiền", "Ghi chú", "Đã trả", "Thời gian"
+                "STT", "Tên tài khoản", "Mật khẩu", "Quyền quản trị", "Thời gian tạo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                false, true, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -279,31 +151,31 @@ public class Users extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        debtsTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        debtsTable.setFocusable(false);
-        debtsTable.setRowHeight(30);
-        debtsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        usersTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        usersTable.setFocusable(false);
+        usersTable.setRowHeight(30);
+        usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                debtsTableMousePressed(evt);
+                usersTableMousePressed(evt);
             }
         });
-        jScrollPane1.setViewportView(debtsTable);
+        jScrollPane1.setViewportView(usersTable);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        searchField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        searchField.setText("Nhập từ khóa...");
-        searchField.setPreferredSize(new java.awt.Dimension(102, 31));
+        passwordField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        passwordField.setText("Mật khẩu...");
+        passwordField.setPreferredSize(new java.awt.Dimension(102, 31));
 
-        btnSearch.setBackground(new java.awt.Color(0, 102, 102));
-        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
-        btnSearch.setText("Thêm mới");
-        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSearch.setFocusable(false);
-        btnSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAddNewUser.setBackground(new java.awt.Color(0, 102, 102));
+        btnAddNewUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAddNewUser.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddNewUser.setText("Thêm mới");
+        btnAddNewUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddNewUser.setFocusable(false);
+        btnAddNewUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnSearchMousePressed(evt);
+                btnAddNewUserMousePressed(evt);
             }
         });
 
@@ -315,9 +187,13 @@ public class Users extends javax.swing.JPanel {
             }
         });
 
-        searchField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        searchField1.setText("Nhập từ khóa...");
-        searchField1.setPreferredSize(new java.awt.Dimension(102, 31));
+        usernameField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        usernameField.setText("Tên tài khoản...");
+        usernameField.setPreferredSize(new java.awt.Dimension(102, 31));
+
+        cbbRole.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cbbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quản trị", "Người dùng" }));
+        cbbRole.setSelectedIndex(1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -326,24 +202,27 @@ public class Users extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnDelete)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(searchField1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(136, 136, 136)
+                .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(btnSearch)
+                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbbRole, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAddNewUser)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(searchField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAddNewUser, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbbRole))
                 .addContainerGap())
         );
 
@@ -371,100 +250,61 @@ public class Users extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMousePressed
-        ArrayList<Debt> inComeByMonthYear = debtsModel.searchDebts(searchField.getText());
-        showDebtsToTable(inComeByMonthYear);
-    }//GEN-LAST:event_btnSearchMousePressed
-
-    private void btnResetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMousePressed
-        titleFiled.setText("");
-        noteField.setText("");
-        amountField.setText("");
-    }//GEN-LAST:event_btnResetMousePressed
-
-    private void btnSaveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMousePressed
-        if(titleFiled.getText().trim().isEmpty() || amountField.getText().trim().isEmpty()) {
-            showMessageDialog(addNewDialog, "Trường tiêu đề và số tiền không được bỏ trống.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+    private void btnAddNewUserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddNewUserMousePressed
+        if(usernameField.getText().trim().isEmpty() || passwordField.getText().trim().isEmpty()) {
+            showMessageDialog(this, "Tên người dùng và mật khẩu không được phép để trống.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Date date = dateField.getDate();
         
-        String dateStr = null;
-        try {
-            dateStr = "20"+(date.getYear() - 100)+"-"+date.getMonth()+"-"+date.getDate() + " 00:00:00";
-        } catch(Exception e) {
-        }
-        
-        Debt debt = new Debt(
+        User user = new User(
             -1,
-            State.currentUser.getId(),
-            titleFiled.getText(),
-            noteField.getText(),
-            Integer.valueOf(Helper.rmNotNumber(amountField.getText())),
-            dateStr,
-            0
+            usernameField.getText(),
+            passwordField.getText(),
+            cbbRole.getSelectedIndex() + 1
         );
         
-        boolean resuilt = debtsModel.insertNewDebt(debt);
-        if(resuilt) {
-            //showMessageDialog(addNewDialog, "Đã thêm vào bảng thu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            titleFiled.setText("");
-            noteField.setText("");
-            amountField.setText("");
-            addNewDialog.dispose();
+        if(!usersModel.insertNewUser(user)) {
+            showMessageDialog(this, "Tên người dùng đã tồn tại hoặc có lỗi bất ngờ xảy ra.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
         } else {
-            showMessageDialog(addNewDialog, "Có lỗi trong quá trình thêm vào bảng thu nhập.", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+            getAllUsers();
         }
-    }//GEN-LAST:event_btnSaveMousePressed
+    }//GEN-LAST:event_btnAddNewUserMousePressed
 
-    private void debtsTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_debtsTableMousePressed
-        if(debtsTable.getSelectedRow() >= 0) {
+    private void usersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersTableMousePressed
+        if(usersTable.getSelectedRow() >= 0) {
             btnDelete.setVisible(true);
         }
-    }//GEN-LAST:event_debtsTableMousePressed
+    }//GEN-LAST:event_usersTableMousePressed
 
     private void btnDeleteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMousePressed
         int resuiltConfirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa các mục đã chọn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if(resuiltConfirm != 1) {
             
-            int[] selectedRows = debtsTable.getSelectedRows();
+            int[] selectedRows = usersTable.getSelectedRows();
             //delete in database
             for(int row: selectedRows) {
-                debtsModel.deteteDebts(debtsShowInTable.get(row).getId());
+                usersModel.deteteUsers(usersShowInTable.get(row).getId());
             }
             
             //delete in table
-            DefaultTableModel tableModel = (DefaultTableModel) debtsTable.getModel();
+            DefaultTableModel tableModel = (DefaultTableModel) usersTable.getModel();
             for(int i = selectedRows.length - 1; i>=0; i--) {
                 tableModel.removeRow(selectedRows[i]);
             }
         }
-        Helper.updateUserTotalAmountInUI(mainFormModel.totalUserAmount());
     }//GEN-LAST:event_btnDeleteMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDialog addNewDialog;
-    private javax.swing.JTextField amountField;
+    private javax.swing.JButton btnAddNewUser;
     private javax.swing.JLabel btnDelete;
-    private javax.swing.JButton btnReset;
-    private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSearch;
-    private com.toedter.calendar.JDateChooser dateField;
-    private javax.swing.JTable debtsTable;
+    private javax.swing.JComboBox<String> cbbRole;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea noteField;
-    private javax.swing.JTextField searchField;
-    private javax.swing.JTextField searchField1;
-    private javax.swing.JTextField titleFiled;
+    private javax.swing.JTextField passwordField;
+    private javax.swing.JTextField usernameField;
+    private javax.swing.JTable usersTable;
     // End of variables declaration//GEN-END:variables
 }
 
@@ -472,32 +312,34 @@ public class Users extends javax.swing.JPanel {
 class UsersTableModelListener implements TableModelListener {
   Users usersPanel;
   JTable table;
-  DebtsModel debtsModelListener = new DebtsModel();
+  UsersModel usersModelListener = new UsersModel();
   
-  UsersTableModelListener(JTable table, Users debts) {
+  UsersTableModelListener(JTable table, Users users) {
     this.table = table;
-    this.usersPanel = debts;
+    this.usersPanel = users;
   }
 
   @Override
   public void tableChanged(TableModelEvent e) {
     int firstRow = e.getFirstRow();
     int column = e.getColumn();
-    String[] colsInDb = {"title", "amount", "note", "status", "datetime"};
+    String[] colsInDb = {"username", "password", "role"};
     
     if (e.getType() == TableModelEvent.UPDATE) {
-        int currentInComeId = Users.debtsShowInTable.get(firstRow).getId();
+        int currentInComeId = Users.usersShowInTable.get(firstRow).getId();
         Object value = table.getValueAt(firstRow, column);
         String updateValue = "";
         
         switch(column) {
-            case 2: 
-                updateValue = Helper.rmNotNumber(value.toString());
-                Users.debtsShowInTable.get(firstRow).setAmount(Integer.valueOf(updateValue));
+            case 2:
+                if(value.toString().matches("\\*{6,}")) {
+                    return;
+                }
+                
+                updateValue = Helper.md5(value.toString());
                 break;
-            case 4: 
+            case 3:
                 updateValue = (boolean)table.getValueAt(firstRow, column)?"1":"0";
-                Users.debtsShowInTable.get(firstRow).setStatus(Integer.valueOf(updateValue));
                 break;
             default:
                 updateValue = value.toString();
@@ -505,11 +347,11 @@ class UsersTableModelListener implements TableModelListener {
         
         
         
-        boolean resuilt = debtsModelListener.updateDebtCol(currentInComeId, colsInDb[column-1], updateValue);
+        boolean resuilt = usersModelListener.updateUserCol(currentInComeId, colsInDb[column-1], updateValue);
         if(!resuilt) 
             showMessageDialog(table, "Có lỗi trong quá trình cập nhật, vui lòng kiểm tra lại dữ liệu nhập vào.", "Thông báo", JOptionPane.ERROR_MESSAGE);
         else
-            usersPanel.getAllDebts();
+            usersPanel.getAllUsers();
     }
   }
 }

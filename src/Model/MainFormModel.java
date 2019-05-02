@@ -9,7 +9,7 @@ import Library.DBManager;
 
 /**
  *
- * @author RobertTrieu
+ * @author Trieu Tai Niem
  */
 public class MainFormModel {
     DBManager dbManager = new DBManager();

@@ -2,6 +2,7 @@ package Model;
 
 import Entity.User;
 import Library.DBManager;
+import Library.Helper;
 import java.util.HashMap;
 
 /**
@@ -15,7 +16,7 @@ public class LoginModel {
     public User loginUser(String userName, String password) {
         String sqlQuery = _dBManager.securceSql(
             "SELECT * FROM users WHERE username={$1} AND password={$2}",
-            new String[]{userName, password}
+            new String[]{userName, Helper.md5(password)}
         );
         HashMap<String, Object> loginResuilt = _dBManager.getSingleRow(sqlQuery);
         if(!loginResuilt.isEmpty()) 
