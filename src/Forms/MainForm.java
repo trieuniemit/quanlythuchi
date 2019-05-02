@@ -412,7 +412,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(TabBarItem8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TabBarItem7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -427,7 +427,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         TabContentLayout.setVerticalGroup(
             TabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout ContainerLayout = new javax.swing.GroupLayout(Container);
@@ -443,10 +443,11 @@ public class MainForm extends javax.swing.JFrame {
         ContainerLayout.setVerticalGroup(
             ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContainerLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TabContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TabBar, javax.swing.GroupLayout.PREFERRED_SIZE, 679, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(TabContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContainerLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(TabBar, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
 
@@ -458,7 +459,9 @@ public class MainForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         bindingGroup.bind();
@@ -534,14 +537,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel ItemIcon3;
     private javax.swing.JLabel ItemIcon4;
     private javax.swing.JLabel ItemIcon5;
-    private javax.swing.JLabel ItemIcon6;
     private javax.swing.JLabel ItemIcon7;
     private javax.swing.JLabel ItemIcon8;
     private javax.swing.JLabel ItemLabel2;
     private javax.swing.JLabel ItemLabel3;
     private javax.swing.JLabel ItemLabel4;
     private javax.swing.JLabel ItemLabel5;
-    private javax.swing.JLabel ItemLabel6;
     private javax.swing.JLabel ItemLabel7;
     private javax.swing.JLabel ItemLabel8;
     private javax.swing.JPanel TabBar;
@@ -550,7 +551,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel TabBarItem3;
     private javax.swing.JPanel TabBarItem4;
     private javax.swing.JPanel TabBarItem5;
-    private javax.swing.JPanel TabBarItem6;
     private javax.swing.JPanel TabBarItem7;
     private javax.swing.JPanel TabBarItem8;
     private javax.swing.JPanel TabContent;
